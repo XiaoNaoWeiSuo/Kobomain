@@ -1331,8 +1331,8 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  int selectedButtonIndex = 0;
-  final PageController homepagecontroller = PageController();
+  int selectedButtonIndex = 4;
+  final PageController homepagecontroller = PageController(initialPage: 4);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1369,10 +1369,8 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 0; // 更新选中的按钮索引
-                        homepagecontroller.animateToPage(
+                        homepagecontroller.jumpToPage(
                           0, // 首页对应的页面索引
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
                         );
                       });
                     },
@@ -1398,10 +1396,8 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 1; // 更新选中的按钮索引
-                        homepagecontroller.animateToPage(
+                        homepagecontroller.jumpToPage(
                           1, // 存款页面对应的页面索引
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
                         );
                       });
                     },
@@ -1427,10 +1423,8 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 2; // 更新选中的按钮索引
-                        homepagecontroller.animateToPage(
+                        homepagecontroller.jumpToPage(
                           2, // 存款页面对应的页面索引
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
                         );
                       });
                     },
@@ -1455,10 +1449,8 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 3; // 更新选中的按钮索引
-                        homepagecontroller.animateToPage(
+                        homepagecontroller.jumpToPage(
                           3, // 存款页面对应的页面索引
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
                         );
                       });
                     },
@@ -1483,10 +1475,8 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 4; // 更新选中的按钮索引
-                        homepagecontroller.animateToPage(
+                        homepagecontroller.jumpToPage(
                           4, // 存款页面对应的页面索引
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
                         );
                       });
                     },
