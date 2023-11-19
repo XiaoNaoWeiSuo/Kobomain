@@ -1,4 +1,10 @@
 import 'package:dio/dio.dart';
+import 'dart:html' as html;
+
+//网页跳转
+Future<void> redirectToUrl(Uri url) async {
+  html.window.location.href = url.toString();
+}
 
 Future<Map> IntoHome(token) async {
   String url = 'http://49.235.106.67:5000/api/userdata/';
