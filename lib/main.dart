@@ -12,7 +12,10 @@ Future<void> main() async {
   }
   // 获取本地存储中的 token
   String? storedToken = html.window.localStorage['token'];
+  print("Token is $storedToken");
+
   Map data = await IntoHome(storedToken);
+  //print("Data is$data");
   runApp(MyApp(
     data: data,
   ));
@@ -26,8 +29,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: IndexScreen(),
-      //home: HomeScreen(data: data),
+      // home: OutScreen(),
+      home: HomeScreen(data: data),
     );
   }
 }
