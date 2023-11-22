@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:kobo_login/sonpage.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'core.dart';
 import 'design.dart';
@@ -40,7 +41,7 @@ class InfoScreenState extends State<InfoScreen> {
         children: [
           Container(
             padding: EdgeInsets.only(top: 20, left: 20, right: 10, bottom: 10),
-            height: 240,
+            height: 200,
             color: Color.fromARGB(255, 3, 67, 244),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,6 +125,12 @@ class InfoScreenState extends State<InfoScreen> {
             child: Column(
               children: [
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => logsScreen()),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'core.dart';
 import 'pages.dart';
 import 'dart:html' as html;
+import 'sonpage.dart';
 
 Future<void> main() async {
   String? urlToken =
@@ -10,6 +11,10 @@ Future<void> main() async {
   if (urlToken != null) {
     html.window.localStorage['token'] = urlToken;
   }
+  //  else {
+  //   html.window.localStorage['token'] =
+  //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIyMDIyMDA3OTIzIiwiZXhwIjoxNzAwNzQ3NTk5fQ.Rmgk1arZKHCIMpvRqYoNPNKF6qjwk6rKQciT1ymh-kE";
+  // }
   // 获取本地存储中的 token
   String? storedToken = html.window.localStorage['token'];
   print("Token is $storedToken");
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: OutScreen(),
+      //home: logsScreen(),
       home: HomeScreen(data: data),
     );
   }
