@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'dart:async';
-import 'dart:convert';
+//import 'dart:async';
+//import 'dart:convert';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:kobo_login/sonpage.dart';
@@ -11,7 +11,8 @@ import 'design.dart';
 
 class InfoScreen extends StatefulWidget {
   final Map info;
-  const InfoScreen({super.key, required this.info});
+  List history;
+  InfoScreen({super.key, required this.info, required this.history});
   @override
   State<InfoScreen> createState() => InfoScreenState();
 }
@@ -22,6 +23,7 @@ class InfoScreenState extends State<InfoScreen> {
   String grade = "";
   String level = "";
   String num = "";
+  String identiy = "0";
   @override
   void initState() {
     super.initState();
@@ -31,6 +33,7 @@ class InfoScreenState extends State<InfoScreen> {
     grade = widget.info["code"];
     level = widget.info["level"];
     num = widget.info["total"];
+    identiy = widget.info["check"];
   }
 
   @override
@@ -55,9 +58,9 @@ class InfoScreenState extends State<InfoScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                           color: Color.fromARGB(255, 3, 123, 244)),
                       child: Text(
                         "会员ID：$id",
@@ -69,11 +72,21 @@ class InfoScreenState extends State<InfoScreen> {
                       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(217, 244, 71, 3)),
-                      child: Text(
-                        "已实名认证",
-                        style: TextStyle(color: Colors.white, fontSize: 11),
-                      ),
+                          color: identiy == "1"
+                              ? Color.fromARGB(217, 244, 71, 3)
+                              : Color.fromARGB(158, 244, 71, 3)),
+                      child: identiy == "1"
+                          ? Text(
+                              "已实名认证",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 11),
+                            )
+                          : Text(
+                              "未实名认证",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 239, 239, 239),
+                                  fontSize: 11),
+                            ),
                     )
                   ],
                 ),
@@ -128,7 +141,10 @@ class InfoScreenState extends State<InfoScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => logsScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => logsScreen(
+                                log: widget.history,
+                              )),
                     );
                   },
                   child: Container(
@@ -143,7 +159,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.copy,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -152,7 +168,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "收益明细",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -160,6 +176,12 @@ class InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => depositScreen()),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -172,7 +194,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.layers,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -181,7 +203,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "存款记录",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -189,6 +211,12 @@ class InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => atmScreen()),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -201,7 +229,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.credit_card,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -210,7 +238,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "取款记录",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -218,6 +246,12 @@ class InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => settingScreen()),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -230,7 +264,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.settings,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -239,7 +273,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "系统设置",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -247,6 +281,12 @@ class InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => identityScreen()),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -259,7 +299,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.person,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -268,7 +308,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "实名认证",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -276,6 +316,12 @@ class InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
                 GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => languageScreen()),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -288,7 +334,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.home,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -297,7 +343,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "语言设置",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -307,7 +353,7 @@ class InfoScreenState extends State<InfoScreen> {
                 GestureDetector(
                   onTap: () {
                     html.window.localStorage.remove('token');
-                    redirectToUrl(Uri.parse('http://49.235.106.67'));
+                    redirectToUrl(Uri.parse('$initialurl/index/'));
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
@@ -321,7 +367,7 @@ class InfoScreenState extends State<InfoScreen> {
                         Icon(
                           Icons.exit_to_app,
                           color: Colors.black54,
-                          size: 18,
+                          size: 20,
                         ),
                         SizedBox(
                           width: 10,
@@ -330,7 +376,7 @@ class InfoScreenState extends State<InfoScreen> {
                           "退出登录",
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500),
                         )
                       ],
@@ -353,21 +399,19 @@ class IndexScreen extends StatefulWidget {
   State<IndexScreen> createState() => IndexScreenState();
 }
 
-class IndexScreenState extends State<IndexScreen> {
+class IndexScreenState extends State<IndexScreen>
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(children: [
       Stack(
         children: [
-          Column(
-            children: [
-              Image.network(
-                "https://gw.alipayobjects.com/mdn/rms_48b4e9/afts/img/A*dML_Qqo8YKoAAAAAAAAAAAAAARQnAQ",
-                height: 140,
-                fit: BoxFit.fill,
-              )
-            ],
+          Image.asset(
+            "assets/bg1.jpg",
+            height: 140,
+            width: 500,
+            fit: BoxFit.fitWidth,
           ),
           Padding(
             padding: EdgeInsets.all(10),
@@ -386,10 +430,10 @@ class IndexScreenState extends State<IndexScreen> {
                 ],
               ),
               SizedBox(
-                height: 30,
+                height: 50,
               ),
-              Image.network(
-                "https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4wwuO?ver=1fc3",
+              Image.asset(
+                "assets/bg2.jpg",
                 height: 110,
                 width: 500,
                 fit: BoxFit.fitWidth,
@@ -399,7 +443,7 @@ class IndexScreenState extends State<IndexScreen> {
               ),
               Stack(
                 children: [
-                  TextAnimation(text: "测试文本滚动动画"),
+                  TextAnimation(text: "测试文本测试文本测试文本测试文本测试文本测试文本"),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
@@ -449,20 +493,11 @@ class IndexScreenState extends State<IndexScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ModelScreen(
-                                  label: "1",
-                                )),
-                      );
-                    },
                     child: Container(
                       //padding: EdgeInsets.all(5),
-                      height: 90,
-                      width: 90,
-                      margin: EdgeInsets.all(4),
+                      height: 100,
+                      width: 100,
+                      margin: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
@@ -476,7 +511,7 @@ class IndexScreenState extends State<IndexScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 60,
+                            width: 70,
                             child: Image.asset("assets/11.png"),
                           ),
                           Text(
@@ -488,81 +523,63 @@ class IndexScreenState extends State<IndexScreen> {
                     ),
                   ),
                   GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModelScreen(
-                                    label: "2",
-                                  )),
-                        );
-                      },
                       child: Container(
-                        //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 2,
-                                  offset: Offset(5, 5))
-                            ]),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 50,
-                              child: Image.asset("assets/22.png"),
-                            ),
-                            Text(
-                              "余额宝",
-                              style: TextStyle(fontSize: 10, height: 1.5),
-                            )
-                          ],
+                    //padding: EdgeInsets.all(5),
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 2,
+                              offset: Offset(5, 5))
+                        ]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 70,
+                          child: Image.asset("assets/22.png"),
                         ),
-                      )),
+                        Text(
+                          "余额宝",
+                          style: TextStyle(fontSize: 10, height: 1.5),
+                        )
+                      ],
+                    ),
+                  )),
                   GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModelScreen(
-                                    label: "3",
-                                  )),
-                        );
-                      },
                       child: Container(
-                        //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 2,
-                                  offset: Offset(5, 5))
-                            ]),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 50,
-                              child: Image.asset("assets/33.png"),
-                            ),
-                            Text(
-                              "余利宝",
-                              style: TextStyle(fontSize: 10, height: 1.5),
-                            )
-                          ],
+                    //padding: EdgeInsets.all(5),
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 2,
+                              offset: Offset(5, 5))
+                        ]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 70,
+                          child: Image.asset("assets/33.png"),
                         ),
-                      )),
+                        Text(
+                          "余利宝",
+                          style: TextStyle(fontSize: 10, height: 1.5),
+                        )
+                      ],
+                    ),
+                  )),
                 ],
               ),
               Container(
@@ -592,9 +609,9 @@ class IndexScreenState extends State<IndexScreen> {
                     },
                     child: Container(
                       //padding: EdgeInsets.all(5),
-                      height: 90,
-                      width: 90,
-                      margin: EdgeInsets.all(4),
+                      height: 100,
+                      width: 100,
+                      margin: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
@@ -608,7 +625,7 @@ class IndexScreenState extends State<IndexScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 60,
+                            width: 70,
                             child: Image.asset("assets/11.png"),
                           ),
                           Text(
@@ -631,9 +648,9 @@ class IndexScreenState extends State<IndexScreen> {
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
@@ -647,7 +664,7 @@ class IndexScreenState extends State<IndexScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 70,
                               child: Image.asset("assets/22.png"),
                             ),
                             Text(
@@ -669,9 +686,9 @@ class IndexScreenState extends State<IndexScreen> {
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
@@ -685,7 +702,7 @@ class IndexScreenState extends State<IndexScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 70,
                               child: Image.asset("assets/33.png"),
                             ),
                             Text(
@@ -724,9 +741,9 @@ class IndexScreenState extends State<IndexScreen> {
                     },
                     child: Container(
                       //padding: EdgeInsets.all(5),
-                      height: 90,
-                      width: 90,
-                      margin: EdgeInsets.all(4),
+                      height: 100,
+                      width: 100,
+                      margin: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
@@ -740,7 +757,7 @@ class IndexScreenState extends State<IndexScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 60,
+                            width: 70,
                             child: Image.asset("assets/11.png"),
                           ),
                           Text(
@@ -763,9 +780,9 @@ class IndexScreenState extends State<IndexScreen> {
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
@@ -779,7 +796,7 @@ class IndexScreenState extends State<IndexScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 70,
                               child: Image.asset("assets/22.png"),
                             ),
                             Text(
@@ -801,9 +818,9 @@ class IndexScreenState extends State<IndexScreen> {
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
@@ -817,7 +834,7 @@ class IndexScreenState extends State<IndexScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: 50,
+                              width: 70,
                               child: Image.asset("assets/33.png"),
                             ),
                             Text(
@@ -849,9 +866,9 @@ class IndexScreenState extends State<IndexScreen> {
                       child: Container(
                         clipBehavior: Clip.hardEdge,
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Color.fromARGB(255, 199, 214, 255),
                             borderRadius: BorderRadius.circular(5),
@@ -885,27 +902,27 @@ class IndexScreenState extends State<IndexScreen> {
                             Text(
                               "限时抢购",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "6.35",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "9.45",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "12.25",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "时收益",
                               style: TextStyle(
-                                  fontSize: 7,
+                                  fontSize: 10,
                                   height: 1.5,
                                   color: Colors.black),
                             )
@@ -918,9 +935,9 @@ class IndexScreenState extends State<IndexScreen> {
                       child: Container(
                         clipBehavior: Clip.hardEdge,
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Color.fromARGB(255, 199, 214, 255),
                             borderRadius: BorderRadius.circular(5),
@@ -954,27 +971,27 @@ class IndexScreenState extends State<IndexScreen> {
                             Text(
                               "短期灵活",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "5.85",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "8.95",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "11.75",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "时收益",
                               style: TextStyle(
-                                  fontSize: 7,
+                                  fontSize: 10,
                                   height: 1.5,
                                   color: Colors.black),
                             )
@@ -987,9 +1004,9 @@ class IndexScreenState extends State<IndexScreen> {
                       child: Container(
                         clipBehavior: Clip.hardEdge,
                         //padding: EdgeInsets.all(5),
-                        height: 90,
-                        width: 90,
-                        margin: EdgeInsets.all(4),
+                        height: 100,
+                        width: 100,
+                        margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Color.fromARGB(255, 199, 214, 255),
                             borderRadius: BorderRadius.circular(5),
@@ -1023,27 +1040,27 @@ class IndexScreenState extends State<IndexScreen> {
                             Text(
                               "长期收益",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "6.35",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "9.45",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "12.25",
                               style: TextStyle(
-                                  fontSize: 8, height: 1.5, color: Colors.red),
+                                  fontSize: 10, height: 1.5, color: Colors.red),
                             ),
                             Text(
                               "时收益",
                               style: TextStyle(
-                                  fontSize: 7,
+                                  fontSize: 10,
                                   height: 1.5,
                                   color: Colors.black),
                             )
@@ -1069,10 +1086,12 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   Map info = {};
+  List history = [];
   @override
   void initState() {
     super.initState();
-    info = json.decode(widget.data["data2"].replaceAll("'", "\""));
+    info = widget.data["data2"]; // json.decode(.replaceAll("'", "\""));
+    history = widget.data["data3"];
   }
 
   int selectedButtonIndex = 4;
@@ -1091,7 +1110,10 @@ class HomeScreenState extends State<HomeScreen> {
             CunScreen(),
             TalkScreen(),
             OutScreen(),
-            InfoScreen(info: info)
+            InfoScreen(
+              info: info,
+              history: history,
+            )
           ],
         )),
         Container(
@@ -1107,7 +1129,9 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.home),
+                    icon: Icon(
+                      Icons.home,
+                    ),
                     color:
                         selectedButtonIndex == 0 ? Colors.blue : Colors.black54,
                     onPressed: () {

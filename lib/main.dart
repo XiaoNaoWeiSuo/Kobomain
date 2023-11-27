@@ -10,11 +10,11 @@ Future<void> main() async {
   // 如果地址中有 token，则存储到本地存储中
   if (urlToken != null) {
     html.window.localStorage['token'] = urlToken;
+  } else {
+    html.window.localStorage['token'] =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI5ODc4OTc1NDAiLCJleHAiOjE3MDExNDg3MzR9.PYyZoms-3KmPsR6f0D01asV9gbl6ff9WJUWyWWiWQyk";
   }
-  //  else {
-  //   html.window.localStorage['token'] =
-  //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIyMDIyMDA3OTIzIiwiZXhwIjoxNzAwNzQ3NTk5fQ.Rmgk1arZKHCIMpvRqYoNPNKF6qjwk6rKQciT1ymh-kE";
-  // }
+
   // 获取本地存储中的 token
   String? storedToken = html.window.localStorage['token'];
   print("Token is $storedToken");
@@ -29,12 +29,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final Map data;
   const MyApp({required this.data, super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //home: logsScreen(),
+      title: "蚂蚁消金",
+      //home: IndexScreen(),
       home: HomeScreen(data: data),
     );
   }

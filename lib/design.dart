@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'dart:convert';
-
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'dart:html' as html;
-
+import 'pages.dart';
 import 'package:kobo_login/core.dart';
 
 class TextAnimation extends StatefulWidget {
@@ -31,7 +31,7 @@ class _TextAnimationState extends State<TextAnimation>
 
     _positionTween = Tween<double>(
       begin: 1,
-      end: -0.3,
+      end: -1,
     );
   }
 
@@ -66,32 +66,37 @@ class _TextAnimationState extends State<TextAnimation>
 }
 
 class MyCircularCheckbox extends StatefulWidget {
+  final ValueChanged<bool>? onChanged;
+
+  MyCircularCheckbox({this.onChanged});
+
   @override
   _MyCircularCheckboxState createState() => _MyCircularCheckboxState();
 }
 
 class _MyCircularCheckboxState extends State<MyCircularCheckbox> {
-  bool isChecked = false;
+  bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         setState(() {
-          isChecked = !isChecked;
+          _isChecked = !_isChecked;
+          widget.onChanged?.call(_isChecked);
         });
       },
       child: Container(
         width: 18.0,
         height: 18.0,
         decoration: BoxDecoration(
-          color: isChecked ? Colors.blue : Colors.white,
+          color: _isChecked ? Colors.blue : Colors.white,
           shape: BoxShape.circle,
           border:
-              isChecked ? null : Border.all(color: Colors.black, width: 0.5),
+              _isChecked ? null : Border.all(color: Colors.black, width: 0.5),
         ),
         child: Center(
-          child: isChecked
+          child: _isChecked
               ? Icon(
                   Icons.check,
                   size: 15.0,
@@ -107,29 +112,33 @@ class _MyCircularCheckboxState extends State<MyCircularCheckbox> {
 class TkIntoScreen extends StatefulWidget {
   String label;
   bool state;
-  TkIntoScreen({required this.label, required this.state});
+  TkIntoScreen({
+    super.key,
+    required this.label,
+    required this.state,
+  });
   @override
   State<TkIntoScreen> createState() => TkIntoScreenState();
 }
 
 class TkIntoScreenState extends State<TkIntoScreen> {
   bool check = false;
-  String text = "";
+  String? text = "";
+  TextEditingController number = TextEditingController();
+  TextEditingController password = TextEditingController();
   Map data = {};
+  @override
   void initState() {
     super.initState();
     text = widget.state ? "转入" : "转出";
     String? token = html.window.localStorage['token'];
 
     IntoHome(token).then((value) {
-      //print("");
-      String data1 = value["data1"];
-      //print("data1$data1");
-      data = json.decode(data1.replaceAll("'", "\""))[widget.label];
+      //print("Received value from IntoHome: $value");
+      data = value; //data1[widget.label];
+      //print(token);
       setState(() {});
-      //data = json.decode(data1.replaceAll("'", "\""))[widget.label];
     });
-    // print("111111111111111111111111111111111111111111111111111$data");
   }
 
   @override
@@ -198,7 +207,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                 ),
                 Expanded(child: SizedBox()),
                 Text(
-                  "可$text金额:${data["enout"]}",
+                  "可$text金额:${data.isNotEmpty ? (widget.state ? data["data2"]["total"] : data["data1"][widget.label]["enout"]) : '加载中...'}",
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -216,6 +225,11 @@ class TkIntoScreenState extends State<TkIntoScreen> {
             child: Column(
               children: [
                 TextField(
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
+                  ],
+                  controller: number,
                   decoration: InputDecoration(
                       prefixIcon: Text(
                         "￥",
@@ -228,6 +242,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                               BorderSide(width: 0.1, color: Colors.black12))),
                 ),
                 TextField(
+                  controller: password,
                   obscureText: true,
                   decoration: InputDecoration(
                       hintText: "默认为:登入密码",
@@ -242,7 +257,13 @@ class TkIntoScreenState extends State<TkIntoScreen> {
           height: 50,
           child: Row(
             children: [
-              MyCircularCheckbox(),
+              MyCircularCheckbox(
+                onChanged: (value) {
+                  setState(() {
+                    check = value;
+                  });
+                },
+              ),
               Text(
                 "  同意",
                 style: TextStyle(fontSize: 12, color: Colors.black),
@@ -259,16 +280,108 @@ class TkIntoScreenState extends State<TkIntoScreen> {
           ),
         ),
         GestureDetector(
+          onTap: () {
+            if (number.text != "" && check) {
+              if (widget.state) {
+                Decimal objecttotal =
+                    Decimal.parse(data["data1"][widget.label]["balance"]);
+                Decimal usertotal = Decimal.parse(data["data2"]["total"]);
+                Decimal takemoney = Decimal.parse(number.text);
+                if (usertotal >= takemoney) {
+                  DateTime now = DateTime.now();
+                  List interest = [
+                    [1, "1.0585"],
+                    [3, "1.0895"],
+                    [7, "1.1175"],
+                    [24, "1.1467"],
+                    [72, "1.2153"],
+                    [360, "1.2583"]
+                  ];
+                  DateTime futureTime = now.add(Duration(
+                      hours: interest[(int.parse(widget.label) - 4)]
+                          [0])); //此处-4是因为项目标签是从4开始数的
+                  data["data1"][widget.label]["balance"] =
+                      (objecttotal + takemoney).toStringAsFixed(2);
+                  data["data1"][widget.label]["total"] =
+                      (objecttotal + takemoney).toStringAsFixed(2);
+                  data["data1"][widget.label]["enout"] =
+                      (objecttotal + takemoney).toStringAsFixed(2);
+                  data["data2"]["total"] =
+                      (usertotal - takemoney).toStringAsFixed(2);
+                  data["data3"].add({
+                    "start": "${DateFormat('yyyy-MM-dd HH:mm:ss').format(now)}",
+                    "end":
+                        "${DateFormat('yyyy-MM-dd HH:mm:ss').format(futureTime)}",
+                    "status": "0", //表示项目正在进行
+                    "name": data["data1"][widget.label]["name"],
+                    "base": (objecttotal + takemoney).toStringAsFixed(2),
+                    "interest": data["data1"][widget.label]["interest"],
+                    "gone": ((objecttotal + takemoney) *
+                            Decimal.parse(
+                                interest[(int.parse(widget.label) - 4)][1]))
+                        .toStringAsFixed(2)
+                  });
+                  String? token = html.window.localStorage['token'];
+                  Mout(token, data, password.text).then((value) {
+                    if (value["status"] == "success") {
+                      String? storedToken = html.window.localStorage['token'];
+                      redirectToUrl(
+                          Uri.parse('$initialurl/home/?token=$storedToken'));
+                    } else {
+                      showMyDialog(context, "密码错误或金额不符合要求");
+                    }
+                  });
+                } else {
+                  showMyDialog(context, "产品金额不足");
+                }
+              } else {
+                //产品当前余额
+                Decimal objecttotal =
+                    Decimal.parse(data["data1"][widget.label]["balance"]);
+                //用于钱包余额
+                Decimal usertotal = Decimal.parse(data["data2"]["total"]);
+                //输入框金额
+                Decimal takemoney = Decimal.parse(number.text);
+                if (objecttotal >= takemoney) {
+                  if (takemoney <=
+                      Decimal.parse(data["data1"][widget.label]["enout"])) {
+                    data["data1"][widget.label]["balance"] =
+                        (objecttotal - takemoney).toStringAsFixed(2);
+                    data["data1"][widget.label]["total"] =
+                        (objecttotal - takemoney).toStringAsFixed(2);
+                    data["data1"][widget.label]["enout"] =
+                        (objecttotal - takemoney).toStringAsFixed(2);
+                    data["data2"]["total"] =
+                        (usertotal + takemoney).toStringAsFixed(2);
+                    String? token = html.window.localStorage['token'];
+                    Mout(token, data, password.text).then((value) {
+                      if (value["status"] == "success") {
+                        String? storedToken = html.window.localStorage['token'];
+                        redirectToUrl(
+                            Uri.parse('$initialurl/home/?token=$storedToken'));
+                      } else {
+                        showMyDialog(context, "密码错误或金额不符合要求");
+                      }
+                    });
+                  } else {
+                    showMyDialog(context, "当前金额数量不可提取");
+                  }
+                } else {
+                  showMyDialog(context, "账户余额不足");
+                }
+              }
+            }
+          },
           child: Container(
             height: 35,
             margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
-              color: Colors.blue,
+              color: check ? Colors.blue : Colors.black26,
             ),
             child: Center(
               child: Text(
-                "立即转出",
+                "立即$text",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -277,7 +390,6 @@ class TkIntoScreenState extends State<TkIntoScreen> {
       ],
     ));
   }
-
   // Widget ZhongYinPage() {
   //   return Scaffold(
   //       body: Stack(
@@ -538,7 +650,6 @@ class TkIntoScreenState extends State<TkIntoScreen> {
   //             ),
   //             Expanded(
   //                 child: Container(
-
   //                     //clipBehavior: Clip.hardEdge,
   //                     padding: EdgeInsets.all(20),
   //                     child: Scrollbar(
@@ -555,7 +666,6 @@ class TkIntoScreenState extends State<TkIntoScreen> {
   //     ],
   //   ));
   // }
-
   // Widget YvEPage() {
 //     return Scaffold(
 //         body: Stack(
@@ -783,15 +893,17 @@ class ModelScreenState extends State<ModelScreen> {
   @override
   void initState() {
     super.initState();
+
     String? token = html.window.localStorage['token'];
 
     IntoHome(token).then((value) {
       //print("");
-      String data1 = value["data1"];
+      Map data1 = value["data1"];
       //print("data1$data1");
-      data = json.decode(data1.replaceAll("'", "\""))[widget.label];
+      data = data1[widget.label];
       setState(() {});
       //data = json.decode(data1.replaceAll("'", "\""))[widget.label];
+      //print("source label: ${widget.label}");
     });
     //print("111111111111111111111111111111111111111111111111111$data");
   }
@@ -804,7 +916,7 @@ class ModelScreenState extends State<ModelScreen> {
         Column(
           children: [
             Container(
-              height: 200,
+              height: 250,
               color: Color.fromARGB(255, 254, 79, 52),
             ),
             Expanded(
@@ -815,8 +927,8 @@ class ModelScreenState extends State<ModelScreen> {
         ),
         Positioned(
             child: Padding(
-          padding: EdgeInsets.only(top: 15, left: 10, right: 10),
-          child: Column(
+          padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+          child: ListView(
             children: [
               Row(
                 children: [
@@ -829,13 +941,13 @@ class ModelScreenState extends State<ModelScreen> {
                           child: Icon(
                             Icons.arrow_back_ios,
                             color: Colors.white,
-                            size: 20,
+                            size: 25,
                           ))),
                   Expanded(
                       child: Text(
                     "${data["name"]}",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   )),
                   Container(
                       margin: EdgeInsets.only(left: 10, right: 10),
@@ -848,7 +960,7 @@ class ModelScreenState extends State<ModelScreen> {
               ),
               Container(
                 padding: EdgeInsets.only(top: 45),
-                margin: EdgeInsets.only(top: 35),
+                margin: EdgeInsets.only(top: 35, left: 5, right: 5),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -863,11 +975,11 @@ class ModelScreenState extends State<ModelScreen> {
                       children: [
                         Text(
                           "总余额",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
+                          style: TextStyle(color: Colors.black, fontSize: 14),
                         ),
                         Icon(
                           Icons.visibility,
-                          size: 14,
+                          size: 16,
                           color: Colors.black45,
                         )
                       ],
@@ -892,7 +1004,7 @@ class ModelScreenState extends State<ModelScreen> {
                         style: TextStyle(
                             height: 1.8,
                             color: Colors.black,
-                            fontSize: 11,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400),
                       ),
                     ),
@@ -901,14 +1013,14 @@ class ModelScreenState extends State<ModelScreen> {
                       style: TextStyle(
                           height: 1.4,
                           color: Colors.black54,
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: 45,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 15, right: 15),
+                      margin: EdgeInsets.only(left: 10, right: 10),
                       child: Row(
                         children: [
                           Expanded(
@@ -919,7 +1031,7 @@ class ModelScreenState extends State<ModelScreen> {
                                 style: TextStyle(
                                     height: 1.3,
                                     color: Colors.black54,
-                                    fontSize: 10,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
@@ -941,7 +1053,7 @@ class ModelScreenState extends State<ModelScreen> {
                                 style: TextStyle(
                                     height: 1.3,
                                     color: Colors.black54,
-                                    fontSize: 10,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
@@ -963,7 +1075,7 @@ class ModelScreenState extends State<ModelScreen> {
                                 style: TextStyle(
                                     height: 1.3,
                                     color: Colors.black54,
-                                    fontSize: 10,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
@@ -984,7 +1096,7 @@ class ModelScreenState extends State<ModelScreen> {
                         decoration: BoxDecoration(
                             color: Color.fromARGB(255, 254, 79, 52),
                             borderRadius: BorderRadius.circular(8)),
-                        height: 60,
+                        height: 80,
                         width: 500,
                         margin: EdgeInsets.all(15),
                         child: Column(
@@ -999,7 +1111,7 @@ class ModelScreenState extends State<ModelScreen> {
                                 style: TextStyle(
                                     height: 1,
                                     color: Colors.white,
-                                    fontSize: 11,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w400),
                               ),
                             )),
@@ -1016,21 +1128,21 @@ class ModelScreenState extends State<ModelScreen> {
                                     //fontFamily: "MS Gothic",
                                     height: 1,
                                     color: Colors.white,
-                                    fontSize: 11,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w400),
                               ),
                             )),
                           ],
                         )),
                     SizedBox(
-                      height: 10,
+                      height: 25,
                     ),
                     Container(
                       clipBehavior: Clip.hardEdge,
                       decoration:
                           BoxDecoration(borderRadius: BorderRadius.circular(5)),
                       width: 500,
-                      height: 32,
+                      height: 40,
                       child: Row(
                         children: [
                           Expanded(
@@ -1051,8 +1163,7 @@ class ModelScreenState extends State<ModelScreen> {
                                 child: Text(
                                   "转入",
                                   style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                      color: Colors.white, fontSize: 20),
                                 ),
                               ),
                             ),
@@ -1060,6 +1171,7 @@ class ModelScreenState extends State<ModelScreen> {
                           Expanded(
                               child: GestureDetector(
                                   onTap: () {
+                                    //print(widget.label);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -1075,6 +1187,7 @@ class ModelScreenState extends State<ModelScreen> {
                                       child: Text(
                                         "转出",
                                         style: TextStyle(
+                                          fontSize: 20,
                                           color:
                                               Color.fromARGB(255, 254, 79, 52),
                                         ),
@@ -1087,32 +1200,44 @@ class ModelScreenState extends State<ModelScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                  child: Container(
-                      margin: EdgeInsets.only(top: 20),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 5)
-                          ]),
+              Container(
+                  margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 5)
+                      ]),
 
-                      //clipBehavior: Clip.hardEdge,
-                      padding: EdgeInsets.all(10),
-                      child: Scrollbar(
-                        child: SingleChildScrollView(
-                          child: Text(
-                            "        短期中银宝是银行为与余额宝竞争而一款互联网理财产品，预期收益比银行活期高，随存随取，提现比较灵活，该企业被阿里巴巴购买，隶属旗下公司。阿里巴巴是全球企业间(B2B)电子商务的著名品牌，为数千万网商提供海量商机信息和便捷安全的在线交易市场，也是商人们以商会友、真实互动的社区平台。",
-                            style: TextStyle(height: 2.2, fontSize: 12),
-                          ),
-                        ),
-                      )))
+                  //clipBehavior: Clip.hardEdge,
+                  padding: EdgeInsets.all(10),
+                  child: Scrollbar(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        "        ${discreption[widget.label]}",
+                        style: TextStyle(height: 2.2, fontSize: 17),
+                      ),
+                    ),
+                  ))
             ],
           ),
         ))
       ],
     ));
   }
+
+  Map discreption = {
+    "4":
+        "短期中银宝是蚂蚁财富推出的一种理财产品低风险、高收益、短期灵活的理财产品，它的出现旨在让投资者以较低的风险获得更高的收益，追求更稳定的资产增值效果，这种理财产品的特点是资金随时可取，没有固定期限，可以灵活调整资产配置，通过合理地分散资产，降低风险，中银宝可为投资者带来更多的收益。 短期中银宝活期存款利率为5.85%，投资时长1H，利息=存款余额*5.85%。",
+    "5":
+        "短期余额宝是蚂蚁集团旗下的余额增值服务和活期资金管理服务产品，于2013年6月推出，余额宝特点是操作简便、低门槛、零手续费、可随取随用，是中国用户数最多的货币基金。 短期余额宝活期存款利率为8.95%，投资时长3H，利息=存款余额*8.95%",
+    "6":
+        "短期余利宝是蚂蚁集团旗下的一款货币基金产品，由阿里巴巴旗下的支付平台——支付宝推出。其只要目的是为用户提供便捷、快速、高收益的理财服务。余利宝投资于货币市场工具和银行存款等低风险金融产品，用户可以随时买入或赎回，没有任何费用和锁定时间。 短期余额宝活期存款利率为11.75%，投资时长7H，利息=存款余额*11.75%",
+    "7":
+        "长期中银宝是蚂蚁财富推出的一种理财产品低风险、高收益、短期灵活的理财产品，它的出现旨在让投资者以较低的风险获得更高的收益，追求更稳定的资产增值效果，这种理财产品的特点是资金随时可取，没有固定期限，可以灵活调整资产配置，通过合理地分散资产，降低风险，中银宝可为投资者带来更多的收益。 短期中银宝活期存款利率为14.67%，投资时长24H，利息=存款余额*14.67%",
+    "8":
+        "长期余额宝是蚂蚁集团旗下的余额增值服务和活期资金管理服务产品，于2013年6月推出，余额宝特点是操作简便、低门槛、零手续费、可随取随用，是中国用户数最多的货币基金。 长期余额宝活期存款利率为21.53%，投资时长72H，利息=存款余额*21.53%",
+    "9":
+        "长期余利宝是蚂蚁集团旗下的一款货币基金产品，由阿里巴巴旗下的支付平台——支付宝推出。其只要目的是为用户提供便捷、快速、高收益的理财服务。余利宝投资于货币市场工具和银行存款等低风险金融产品，用户可以随时买入或赎回，没有任何费用和锁定时间。 长期余利宝活期存款利率为25.83%，投资时长360H，利息=存款余额*25.83%"
+  };
 }
