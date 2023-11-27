@@ -1107,9 +1107,13 @@ class HomeScreenState extends State<HomeScreen> {
           controller: homepagecontroller,
           children: [
             IndexScreen(),
-            CunScreen(),
+            CunScreen(
+              info: info,
+            ),
             TalkScreen(),
-            OutScreen(),
+            OutScreen(
+              total: info["total"],
+            ),
             InfoScreen(
               info: info,
               history: history,
@@ -1299,7 +1303,8 @@ class TalkScreen extends StatelessWidget {
 }
 
 class CunScreen extends StatefulWidget {
-  const CunScreen({super.key});
+  Map info;
+  CunScreen({required this.info, super.key});
 
   @override
   State<CunScreen> createState() => CunScreenState();
@@ -1350,7 +1355,7 @@ class CunScreenState extends State<CunScreen> {
                       style: TextStyle(
                           color: Colors.black, fontSize: 12, height: 2.5),
                     ),
-                    Text("------")
+                    Text("${widget.info["id"]}")
                   ],
                 ),
                 Container(
@@ -1365,7 +1370,7 @@ class CunScreenState extends State<CunScreen> {
                       style: TextStyle(
                           color: Colors.black, fontSize: 12, height: 2.5),
                     ),
-                    Text("------")
+                    Text("${widget.info["name"]}")
                   ],
                 ),
                 Container(
@@ -1390,7 +1395,7 @@ class CunScreenState extends State<CunScreen> {
                       ),
                     ),
                     Text(
-                      "  当前金额:-----￥",
+                      "  当前金额:${widget.info["total"]}￥",
                       style: TextStyle(
                           color: Colors.black, fontSize: 12, height: 2.5),
                     ),
@@ -1643,7 +1648,8 @@ class CunScreenState extends State<CunScreen> {
 }
 
 class OutScreen extends StatefulWidget {
-  const OutScreen({super.key});
+  String total;
+  OutScreen({required this.total, super.key});
 
   @override
   State<OutScreen> createState() => OutScreenState();
@@ -1695,7 +1701,7 @@ class OutScreenState extends State<OutScreen> {
                               color: Colors.black, fontSize: 13, height: 2),
                         ),
                         Text(
-                          "262910.00￥",
+                          "${widget.total}￥",
                           style: TextStyle(
                               color: Colors.red, fontSize: 13, height: 2),
                         ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'dart:html' as html;
-import 'pages.dart';
+//import 'pages.dart';
 import 'package:kobo_login/core.dart';
 
 class TextAnimation extends StatefulWidget {

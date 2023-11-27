@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'core.dart';
 import 'pages.dart';
 import 'dart:html' as html;
-import 'sonpage.dart';
+//import 'sonpage.dart';
 
 Future<void> main() async {
   String? urlToken =
