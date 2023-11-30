@@ -3,7 +3,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 
-String initialurl = "http://49.235.106.67:5001";
+String initialurl = "http://127.0.0.1:8000";
 //网页跳转
 Future<void> redirectToUrl(Uri url) async {
   html.window.location.href = url.toString();

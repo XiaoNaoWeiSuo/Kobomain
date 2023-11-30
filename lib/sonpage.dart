@@ -1,6 +1,7 @@
 //import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:html' as html;
 import 'core.dart';
 
@@ -54,7 +55,10 @@ class IdentityScreenState extends State<IdentityScreen> {
                     ),
                     GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
+                          String? storedToken =
+                              html.window.localStorage['token'];
+                          redirectToUrl(Uri.parse(
+                              '$initialurl/home/?token=$storedToken'));
                         },
                         child: const Text(
                           "关闭",
@@ -90,6 +94,10 @@ class IdentityScreenState extends State<IdentityScreen> {
                     borderRadius: BorderRadius.circular(30)),
                 child: Center(
                   child: TextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'[\u4e00-\u9fa5a-zA-Z\s]+')),
+                    ],
                     enabled: state,
                     controller: name,
                     style: const TextStyle(fontSize: 16),
@@ -113,6 +121,10 @@ class IdentityScreenState extends State<IdentityScreen> {
                     borderRadius: BorderRadius.circular(30)),
                 child: Center(
                   child: TextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'[\u4e00-\u9fa5a-zA-Z\s]+')),
+                    ],
                     enabled: state,
                     controller: bank,
                     style: const TextStyle(fontSize: 16),
@@ -138,6 +150,10 @@ class IdentityScreenState extends State<IdentityScreen> {
                   child: TextField(
                     enabled: state,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(16),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     controller: bankid,
                     style: const TextStyle(fontSize: 16),
                     decoration: const InputDecoration(
@@ -200,7 +216,11 @@ class IdentityScreenState extends State<IdentityScreen> {
         state
             ? GestureDetector(
                 onTap: () {
-                  if (name.text != "") {
+                  if (name.text != "" &&
+                      bank.text != "" &&
+                      bankid.text.length == 16 &&
+                      bankid.text != "" &&
+                      alipay.text != "") {
                     data["data2"]["name"] = name.text;
                     data["data2"]["bank"] = bank.text;
                     data["data2"]["bankid"] = bankid.text;
@@ -211,13 +231,17 @@ class IdentityScreenState extends State<IdentityScreen> {
                     data.remove("status");
                     update(token, data).then((value) {
                       if (value["status"] == "success") {
-                        html.window.location.reload();
+                        showMyDialog(context, "信息填写成功！");
+                        setState(() {
+                          state = false;
+                        });
+                        //html.window.location.reload();
                       } else {
                         showMyDialog(context, "更新失败，请重试");
                       }
                     });
                   } else {
-                    showMyDialog(context, "姓名为必填项");
+                    showMyDialog(context, "请确保信息填写完整，USDT可不填，其余必填，银行卡必须为16位数字");
                   }
                 },
                 child: Container(
@@ -373,7 +397,8 @@ class LogsScreenState extends State<LogsScreen> {
 }
 
 class DepositScreen extends StatefulWidget {
-  const DepositScreen({super.key});
+  final List tin;
+  const DepositScreen({super.key, required this.tin});
 
   @override
   State<DepositScreen> createState() => DepositScreenState();
@@ -413,14 +438,42 @@ class DepositScreenState extends State<DepositScreen> {
             ],
           ),
         ),
-        const Text("暂无存款记录")
+        Expanded(
+            child: ListView.builder(
+          itemCount: widget.tin.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(width: 1, color: Colors.black12)),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    widget.tin[index]["time"],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w300),
+                  ),
+                  const Expanded(child: SizedBox()),
+                  Text(
+                    "+${widget.tin[index]["value"]}",
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.w600),
+                  )
+                ],
+              ),
+            );
+          },
+        ))
       ]),
     );
   }
 }
 
 class AtmScreen extends StatefulWidget {
-  const AtmScreen({super.key});
+  final List out;
+  const AtmScreen({required this.out, super.key});
 
   @override
   State<AtmScreen> createState() => AtmScreenState();
@@ -460,7 +513,34 @@ class AtmScreenState extends State<AtmScreen> {
             ],
           ),
         ),
-        const Text("暂无取款记录")
+        Expanded(
+            child: ListView.builder(
+          itemCount: widget.out.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(width: 1, color: Colors.black12)),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    widget.out[index]["time"],
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w300),
+                  ),
+                  const Expanded(child: SizedBox()),
+                  Text(
+                    "-${widget.out[index]["value"]}",
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.w600),
+                  )
+                ],
+              ),
+            );
+          },
+        ))
       ]),
     );
   }

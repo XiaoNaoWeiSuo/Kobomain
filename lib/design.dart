@@ -8,56 +8,59 @@ import 'dart:html' as html;
 //import 'pages.dart';
 import 'package:kobo_login/core.dart';
 
-// class TextAnimation extends StatefulWidget {
-//   final String text;
-//   const TextAnimation({super.key, required this.text});
-//   @override
-//   _TextAnimationState createState() => _TextAnimationState();
-// }
-// class _TextAnimationState extends State<TextAnimation>
-//     with SingleTickerProviderStateMixin {
-//   late AnimationController _controller;
-//   late Tween<double> _positionTween;
-//   @override
-//   void initState() {
-//     super.initState();
-//     _controller = AnimationController(
-//       duration: const Duration(seconds: 5),
-//       vsync: this,
-//     )..repeat();
-//     _positionTween = Tween<double>(
-//       begin: 1,
-//       end: -1,
-//     );
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return AnimatedBuilder(
-//       animation: _controller,
-//       builder: (context, child) {
-//         double position = _positionTween.evaluate(_controller);
-//         return Transform.translate(
-//           offset: Offset(
-//             MediaQuery.of(context).size.width * position,
-//             0,
-//           ),
-//           child: Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//             child: Text(
-//               widget.text,
-//               style: const TextStyle(fontSize: 12, color: Colors.blue),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-//   @override
-//   void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
-// }
+class TextAnimation extends StatefulWidget {
+  final String text;
+  const TextAnimation({super.key, required this.text});
+  @override
+  _TextAnimationState createState() => _TextAnimationState();
+}
+
+class _TextAnimationState extends State<TextAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Tween<double> _positionTween;
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    )..repeat();
+    _positionTween = Tween<double>(
+      begin: 1,
+      end: -1,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        double position = _positionTween.evaluate(_controller);
+        return Transform.translate(
+          offset: Offset(
+            MediaQuery.of(context).size.width * position,
+            0,
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              widget.text,
+              style: const TextStyle(fontSize: 12, color: Colors.blue),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
 
 class MyCircularCheckbox extends StatefulWidget {
   final ValueChanged<bool>? onChanged;
@@ -126,7 +129,6 @@ class TkIntoScreenState extends State<TkIntoScreen> {
     super.initState();
     text = widget.state ? "转入" : "转出";
     String? token = html.window.localStorage['token'];
-
     lntoHome(token).then((value) {
       //print("Received value from lntoHome: $value");
       data = value; //data1[widget.label];
@@ -152,13 +154,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
             children: [
               TextButton(
                   onPressed: () {
-                    Navigator.pop(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ModelScreen(
-                                label: widget.label,
-                              )),
-                    );
+                    Navigator.of(context).pop();
                   },
                   child: Row(
                     children: const [
@@ -281,31 +277,34 @@ class TkIntoScreenState extends State<TkIntoScreen> {
             if (number.text != "" && check) {
               if (widget.state) {
                 Decimal objecttotal =
-                    Decimal.parse(data["data1"][widget.label]["balance"]);
-                Decimal usertotal = Decimal.parse(data["data2"]["total"]);
-                Decimal takemoney = Decimal.parse(number.text);
+                    Decimal.parse(data["data1"][widget.label]["balance"]); //原资金
+                Decimal usertotal =
+                    Decimal.parse(data["data2"]["total"]); //账户总余额
+                Decimal takemoney = Decimal.parse(number.text); //输入框金额
+
                 if (usertotal >= takemoney) {
                   DateTime now = DateTime.now();
-                  List interest = [
-                    [1, "1.0585"],
-                    [3, "1.0895"],
-                    [7, "1.1175"],
-                    [24, "1.1467"],
-                    [72, "1.2153"],
-                    [360, "1.2583"]
-                  ];
+                  List interest = [1, 3, 7, 24, 72, 360];
                   DateTime futureTime = now.add(Duration(
-                      hours: interest[(int.parse(widget.label) - 4)]
-                          [0])); //此处-4是因为项目标签是从4开始数的
-                  data["data1"][widget.label]["balance"] =
+                      hours: interest[
+                          (int.parse(widget.label) - 4)])); //此处-4是因为项目标签是从4开始数的
+                  // data["data1"][widget.label]["balance"] = //总余额
+                  //     (objecttotal + takemoney).toStringAsFixed(2);
+                  data["data1"][widget.label]["total"] = //总金额&本金
                       (objecttotal + takemoney).toStringAsFixed(2);
-                  data["data1"][widget.label]["total"] =
-                      (objecttotal + takemoney).toStringAsFixed(2);
-                  data["data1"][widget.label]["enout"] =
-                      (objecttotal + takemoney).toStringAsFixed(2);
+
+                  data["data1"][widget.label]["balance"] = //总余额
+                      (Decimal.parse(data["data1"][widget.label]["total"]) +
+                              Decimal.parse(
+                                  data["data1"][widget.label]["current"]))
+                          .toStringAsFixed(2); //本金+收益
+
+                  data["data1"][widget.label]["enout"] = //可转出
+                      "0.00"; //可转出=总余额
+
                   data["data2"]["total"] =
                       (usertotal - takemoney).toStringAsFixed(2);
-                  data["data3"].add({
+                  data["data3"]["object"].add({
                     "start": DateFormat('yyyy-MM-dd HH:mm:ss').format(now),
                     "end": DateFormat('yyyy-MM-dd HH:mm:ss').format(futureTime),
                     "status": "0", //表示项目正在进行
@@ -313,22 +312,21 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                     "base": (objecttotal + takemoney).toStringAsFixed(2),
                     "interest": data["data1"][widget.label]["interest"],
                     "gone": ((objecttotal + takemoney) *
-                            Decimal.parse(
-                                interest[(int.parse(widget.label) - 4)][1]))
+                            (Decimal.parse(
+                                    data["data1"][widget.label]["interest"]) *
+                                Decimal.parse('0.01')))
                         .toStringAsFixed(2)
                   });
                   String? token = html.window.localStorage['token'];
                   mout(token, data, password.text).then((value) {
                     if (value["status"] == "success") {
-                      String? storedToken = html.window.localStorage['token'];
-                      redirectToUrl(
-                          Uri.parse('$initialurl/home/?token=$storedToken'));
+                      showMyDialog(context, "恭喜，资金转入成功！");
                     } else {
                       showMyDialog(context, "密码错误或金额不符合要求");
                     }
                   });
                 } else {
-                  showMyDialog(context, "产品金额不足");
+                  showMyDialog(context, "账户金额不足");
                 }
               } else {
                 //产品当前余额
@@ -346,15 +344,18 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                     data["data1"][widget.label]["total"] =
                         (objecttotal - takemoney).toStringAsFixed(2);
                     data["data1"][widget.label]["enout"] =
-                        (objecttotal - takemoney).toStringAsFixed(2);
+                        (Decimal.parse(data["data1"][widget.label]["enout"]) -
+                                takemoney)
+                            .toStringAsFixed(2);
                     data["data2"]["total"] =
                         (usertotal + takemoney).toStringAsFixed(2);
                     String? token = html.window.localStorage['token'];
                     mout(token, data, password.text).then((value) {
                       if (value["status"] == "success") {
-                        String? storedToken = html.window.localStorage['token'];
-                        redirectToUrl(
-                            Uri.parse('$initialurl/home/?token=$storedToken'));
+                        showMyDialog(context, "恭喜！资金转出成功！");
+                        // String? storedToken = html.window.localStorage['token'];
+                        // redirectToUrl(
+                        //     Uri.parse('$initialurl/home/?token=$storedToken'));
                       } else {
                         showMyDialog(context, "密码错误或金额不符合要求");
                       }
@@ -363,7 +364,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                     showMyDialog(context, "当前金额数量不可提取");
                   }
                 } else {
-                  showMyDialog(context, "账户余额不足");
+                  showMyDialog(context, "产品余额不足");
                 }
               }
             }
@@ -1143,8 +1144,8 @@ class ModelScreenState extends State<ModelScreen> {
                         children: [
                           Expanded(
                               child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
+                            onTap: () async {
+                              final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => TkIntoScreen(
@@ -1152,6 +1153,16 @@ class ModelScreenState extends State<ModelScreen> {
                                           state: true,
                                         )),
                               );
+                              String? token = html.window.localStorage['token'];
+                              lntoHome(token).then((value) {
+                                //print("");
+                                Map data1 = value["data1"];
+                                //print("data1$data1");
+                                data = data1[widget.label];
+                                setState(() {});
+                                //data = json.decode(data1.replaceAll("'", "\""))[widget.label];
+                                //print("source label: ${widget.label}");
+                              });
                             },
                             child: Container(
                               color: const Color.fromARGB(255, 254, 79, 52),
@@ -1166,9 +1177,9 @@ class ModelScreenState extends State<ModelScreen> {
                           )),
                           Expanded(
                               child: GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     //print(widget.label);
-                                    Navigator.push(
+                                    final result = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => TkIntoScreen(
@@ -1176,6 +1187,17 @@ class ModelScreenState extends State<ModelScreen> {
                                                 state: false,
                                               )),
                                     );
+                                    String? token =
+                                        html.window.localStorage['token'];
+                                    lntoHome(token).then((value) {
+                                      //print("");
+                                      Map data1 = value["data1"];
+                                      //print("data1$data1");
+                                      data = data1[widget.label];
+                                      setState(() {});
+                                      //data = json.decode(data1.replaceAll("'", "\""))[widget.label];
+                                      //print("source label: ${widget.label}");
+                                    });
                                   },
                                   child: Container(
                                     color: const Color.fromARGB(

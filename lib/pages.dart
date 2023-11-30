@@ -1,7 +1,11 @@
 //import 'dart:async';
 //import 'dart:convert';
 import 'dart:html' as html;
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+
 import 'package:kobo_login/sonpage.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'core.dart';
@@ -10,7 +14,14 @@ import 'design.dart';
 class InfoScreen extends StatefulWidget {
   final Map info;
   final List history;
-  const InfoScreen({super.key, required this.info, required this.history});
+  final List tin;
+  final List tout;
+  const InfoScreen(
+      {super.key,
+      required this.info,
+      required this.history,
+      required this.tin,
+      required this.tout});
   @override
   State<InfoScreen> createState() => InfoScreenState();
 }
@@ -180,7 +191,7 @@ class InfoScreenState extends State<InfoScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DepositScreen()),
+                          builder: (context) => DepositScreen(tin: widget.tin)),
                     );
                   },
                   child: Container(
@@ -216,7 +227,9 @@ class InfoScreenState extends State<InfoScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AtmScreen()),
+                          builder: (context) => AtmScreen(
+                                out: widget.tout,
+                              )),
                     );
                   },
                   child: Container(
@@ -284,7 +297,7 @@ class InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -446,26 +459,19 @@ class IndexScreenState extends State<IndexScreen>
               const SizedBox(
                 height: 10,
               ),
-              Row(
+              Stack(
                 children: [
                   //const Text("        测试文本测试文本测试文本测试文本测试文本测试文本"),
-                  Container(
-                    width: 50,
-                    color: Colors.white,
-                    child: Row(
-                      children: const [
-                        Icon(Icons.volume_up, size: 15, color: Colors.blue),
-                        Text(
-                          " 公告",
-                          style: TextStyle(fontSize: 12, color: Colors.blue),
+                  const TextAnimation(text: "凝聚爱心用户 4,535,294,299 次捐赠"),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        color: Colors.white,
+                        child: const Text(
+                          " 公  告 ",
+                          style: TextStyle(color: Colors.blue),
                         ),
-                      ],
-                    ),
-                  ),
-                  const Text(
-                    "",
-                    style: TextStyle(fontSize: 12, color: Colors.blue),
-                  ),
+                      ))
                 ],
               ),
               Container(
@@ -1133,7 +1139,18 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     info = widget.data["data2"]; // json.decode(.replaceAll("'", "\""));
-    history = widget.data["data3"];
+    history = widget.data["data3"]["object"];
+  }
+
+  void jumppage(int label) {
+    if (widget.data["data2"]["check"] == "1" || label == 4) {
+      homepagecontroller.jumpToPage(
+        label, // 存款页面对应的页面索引
+      );
+    } else {
+      showMyDialog(context, "请先完成实名认证");
+      selectedButtonIndex = 4;
+    }
   }
 
   int selectedButtonIndex = 4;
@@ -1159,6 +1176,8 @@ class HomeScreenState extends State<HomeScreen> {
             InfoScreen(
               info: info,
               history: history,
+              tin: widget.data["data3"]["in"],
+              tout: widget.data["data3"]["out"],
             )
           ],
         )),
@@ -1183,9 +1202,7 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 0; // 更新选中的按钮索引
-                        homepagecontroller.jumpToPage(
-                          0, // 首页对应的页面索引
-                        );
+                        jumppage(0);
                       });
                     },
                   ),
@@ -1215,9 +1232,7 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 1; // 更新选中的按钮索引
-                        homepagecontroller.jumpToPage(
-                          1, // 存款页面对应的页面索引
-                        );
+                        jumppage(1);
                       });
                     },
                   ),
@@ -1247,9 +1262,7 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 2; // 更新选中的按钮索引
-                        homepagecontroller.jumpToPage(
-                          2, // 存款页面对应的页面索引
-                        );
+                        jumppage(2);
                       });
                     },
                   ),
@@ -1278,9 +1291,7 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 3; // 更新选中的按钮索引
-                        homepagecontroller.jumpToPage(
-                          3, // 存款页面对应的页面索引
-                        );
+                        jumppage(3);
                       });
                     },
                   ),
@@ -1305,9 +1316,7 @@ class HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       setState(() {
                         selectedButtonIndex = 4; // 更新选中的按钮索引
-                        homepagecontroller.jumpToPage(
-                          4, // 存款页面对应的页面索引
-                        );
+                        jumppage(4);
                       });
                     },
                   ),
@@ -1593,14 +1602,21 @@ class CunScreenState extends State<CunScreen> {
                                     color: Colors.black, fontSize: 12),
                               ),
                             )),
-                        const SizedBox(
+                        SizedBox(
                             height: 30,
                             child: Align(
                                 alignment: Alignment.topLeft,
                                 child: TextField(
-                                  style: TextStyle(
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d{0,2}'))
+                                  ],
+                                  style: const TextStyle(
                                       color: Colors.black, fontSize: 12),
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       contentPadding: EdgeInsets.all(0),
                                       border: InputBorder.none,
                                       hintText: "请输入存款金额"),
@@ -1673,7 +1689,9 @@ class CunScreenState extends State<CunScreen> {
                 ],
               )),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              showMyDialog(context, "资金转入成功，请耐心等待客户核实。");
+            },
             child: Container(
               margin: const EdgeInsets.all(10),
               height: 40,
@@ -1707,6 +1725,8 @@ class OutScreenState extends State<OutScreen> {
   int payway = 0;
   bool expandstate = false;
   List way = ["USDT", "银行", "支付宝"];
+  TextEditingController password = TextEditingController();
+  TextEditingController number = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1757,8 +1777,15 @@ class OutScreenState extends State<OutScreen> {
                         ),
                       ],
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: number,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d{0,2}'))
+                      ],
+                      decoration: const InputDecoration(
                           prefixIcon: Text(
                         "￥",
                         style: TextStyle(
@@ -1783,10 +1810,12 @@ class OutScreenState extends State<OutScreen> {
                       "取款密码：",
                       style: TextStyle(color: Colors.black, fontSize: 13),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 40,
                       child: TextField(
-                        decoration: InputDecoration(border: InputBorder.none),
+                        controller: password,
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
                       ),
                     ),
                   ],
@@ -1873,7 +1902,28 @@ class OutScreenState extends State<OutScreen> {
               ],
             )),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            String? token = html.window.localStorage['token'];
+            lntoHome(token).then((value) {
+              Map initdata = value;
+              initdata["data2"]["total"] =
+                  (Decimal.parse(value["data2"]["total"]) -
+                          Decimal.parse(number.text))
+                      .toStringAsFixed(2);
+              DateTime now = DateTime.now();
+              initdata["data3"]["out"].add({
+                "time": DateFormat('yyyy-MM-dd HH:mm:ss').format(now),
+                "value": Decimal.parse(number.text).toStringAsFixed(2)
+              });
+              mout(token, initdata, password.text).then((value) {
+                if (value["status"] == "success") {
+                  showMyDialog(context, "恭喜，取款成功！");
+                } else {
+                  showMyDialog(context, "密码错误或金额不符合要求");
+                }
+              });
+            });
+          },
           child: Container(
             margin: const EdgeInsets.all(10),
             height: 40,
