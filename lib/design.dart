@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,68 +8,61 @@ import 'dart:html' as html;
 //import 'pages.dart';
 import 'package:kobo_login/core.dart';
 
-class TextAnimation extends StatefulWidget {
-  final String text;
-
-  TextAnimation({required this.text});
-
-  @override
-  _TextAnimationState createState() => _TextAnimationState();
-}
-
-class _TextAnimationState extends State<TextAnimation>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Tween<double> _positionTween;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: Duration(seconds: 5),
-      vsync: this,
-    )..repeat();
-
-    _positionTween = Tween<double>(
-      begin: 1,
-      end: -1,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        double position = _positionTween.evaluate(_controller);
-        return Transform.translate(
-          offset: Offset(
-            MediaQuery.of(context).size.width * position,
-            0,
-          ),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              widget.text,
-              style: TextStyle(fontSize: 12, color: Colors.blue),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-}
+// class TextAnimation extends StatefulWidget {
+//   final String text;
+//   const TextAnimation({super.key, required this.text});
+//   @override
+//   _TextAnimationState createState() => _TextAnimationState();
+// }
+// class _TextAnimationState extends State<TextAnimation>
+//     with SingleTickerProviderStateMixin {
+//   late AnimationController _controller;
+//   late Tween<double> _positionTween;
+//   @override
+//   void initState() {
+//     super.initState();
+//     _controller = AnimationController(
+//       duration: const Duration(seconds: 5),
+//       vsync: this,
+//     )..repeat();
+//     _positionTween = Tween<double>(
+//       begin: 1,
+//       end: -1,
+//     );
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return AnimatedBuilder(
+//       animation: _controller,
+//       builder: (context, child) {
+//         double position = _positionTween.evaluate(_controller);
+//         return Transform.translate(
+//           offset: Offset(
+//             MediaQuery.of(context).size.width * position,
+//             0,
+//           ),
+//           child: Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//             child: Text(
+//               widget.text,
+//               style: const TextStyle(fontSize: 12, color: Colors.blue),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+// }
 
 class MyCircularCheckbox extends StatefulWidget {
   final ValueChanged<bool>? onChanged;
 
-  MyCircularCheckbox({this.onChanged});
+  const MyCircularCheckbox({super.key, this.onChanged});
 
   @override
   _MyCircularCheckboxState createState() => _MyCircularCheckboxState();
@@ -97,7 +91,7 @@ class _MyCircularCheckboxState extends State<MyCircularCheckbox> {
         ),
         child: Center(
           child: _isChecked
-              ? Icon(
+              ? const Icon(
                   Icons.check,
                   size: 15.0,
                   color: Colors.white,
@@ -110,9 +104,9 @@ class _MyCircularCheckboxState extends State<MyCircularCheckbox> {
 }
 
 class TkIntoScreen extends StatefulWidget {
-  String label;
-  bool state;
-  TkIntoScreen({
+  final String label;
+  final bool state;
+  const TkIntoScreen({
     super.key,
     required this.label,
     required this.state,
@@ -133,8 +127,8 @@ class TkIntoScreenState extends State<TkIntoScreen> {
     text = widget.state ? "转入" : "转出";
     String? token = html.window.localStorage['token'];
 
-    IntoHome(token).then((value) {
-      //print("Received value from IntoHome: $value");
+    lntoHome(token).then((value) {
+      //print("Received value from lntoHome: $value");
       data = value; //data1[widget.label];
       //print(token);
       setState(() {});
@@ -148,11 +142,11 @@ class TkIntoScreenState extends State<TkIntoScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
               border: Border(
                   bottom: BorderSide(width: 0.5, color: Colors.black12))),
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           height: 50,
           child: Row(
             children: [
@@ -167,7 +161,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                     );
                   },
                   child: Row(
-                    children: [
+                    children: const [
                       Icon(
                         Icons.arrow_back_ios,
                         size: 12,
@@ -182,10 +176,11 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                   child: Center(
                 child: Text(
                   "$text",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               )),
-              Text(
+              const Text(
                 "交易规则",
                 style: TextStyle(fontSize: 12, color: Colors.blue),
               )
@@ -193,22 +188,23 @@ class TkIntoScreenState extends State<TkIntoScreen> {
           ),
         ),
         Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 border: Border(
                     bottom: BorderSide(width: 0.5, color: Colors.black12))),
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             height: 40,
             child: Row(
               children: [
                 Text(
                   "  $text金额",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w500),
                 ),
-                Expanded(child: SizedBox()),
+                const Expanded(child: SizedBox()),
                 Text(
                   "可$text金额:${data.isNotEmpty ? (widget.state ? data["data2"]["total"] : data["data1"][widget.label]["enout"]) : '加载中...'}",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: Colors.black45),
@@ -216,35 +212,36 @@ class TkIntoScreenState extends State<TkIntoScreen> {
               ],
             )),
         Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 border: Border(
                     bottom: BorderSide(width: 0.5, color: Colors.black12))),
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             //height: 150,
             child: Column(
               children: [
                 TextField(
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))
                   ],
                   controller: number,
                   decoration: InputDecoration(
-                      prefixIcon: Text(
+                      prefixIcon: const Text(
                         "￥",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 25),
                       ),
                       hintText: "输入$text金额",
-                      border: UnderlineInputBorder(
+                      border: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(width: 0.1, color: Colors.black12))),
                 ),
                 TextField(
                   controller: password,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: "默认为:登入密码",
                       border: UnderlineInputBorder(
                           borderSide:
@@ -253,7 +250,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
               ],
             )),
         Container(
-          padding: EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 10),
           height: 50,
           child: Row(
             children: [
@@ -264,15 +261,15 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                   });
                 },
               ),
-              Text(
+              const Text(
                 "  同意",
                 style: TextStyle(fontSize: 12, color: Colors.black),
               ),
-              Text(
+              const Text(
                 "《相关协议》",
                 style: TextStyle(fontSize: 12, color: Colors.blue),
               ),
-              Text(
+              const Text(
                 "，并知晓理财可能存在的风险",
                 style: TextStyle(fontSize: 12, color: Colors.black),
               )
@@ -309,9 +306,8 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                   data["data2"]["total"] =
                       (usertotal - takemoney).toStringAsFixed(2);
                   data["data3"].add({
-                    "start": "${DateFormat('yyyy-MM-dd HH:mm:ss').format(now)}",
-                    "end":
-                        "${DateFormat('yyyy-MM-dd HH:mm:ss').format(futureTime)}",
+                    "start": DateFormat('yyyy-MM-dd HH:mm:ss').format(now),
+                    "end": DateFormat('yyyy-MM-dd HH:mm:ss').format(futureTime),
                     "status": "0", //表示项目正在进行
                     "name": data["data1"][widget.label]["name"],
                     "base": (objecttotal + takemoney).toStringAsFixed(2),
@@ -322,7 +318,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                         .toStringAsFixed(2)
                   });
                   String? token = html.window.localStorage['token'];
-                  Mout(token, data, password.text).then((value) {
+                  mout(token, data, password.text).then((value) {
                     if (value["status"] == "success") {
                       String? storedToken = html.window.localStorage['token'];
                       redirectToUrl(
@@ -354,7 +350,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
                     data["data2"]["total"] =
                         (usertotal + takemoney).toStringAsFixed(2);
                     String? token = html.window.localStorage['token'];
-                    Mout(token, data, password.text).then((value) {
+                    mout(token, data, password.text).then((value) {
                       if (value["status"] == "success") {
                         String? storedToken = html.window.localStorage['token'];
                         redirectToUrl(
@@ -374,7 +370,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
           },
           child: Container(
             height: 35,
-            margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
               color: check ? Colors.blue : Colors.black26,
@@ -382,7 +378,7 @@ class TkIntoScreenState extends State<TkIntoScreen> {
             child: Center(
               child: Text(
                 "立即$text",
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -880,8 +876,8 @@ class TkIntoScreenState extends State<TkIntoScreen> {
 }
 
 class ModelScreen extends StatefulWidget {
-  String label;
-  ModelScreen({required this.label, super.key});
+  final String label;
+  const ModelScreen({required this.label, super.key});
 
   @override
   State<ModelScreen> createState() => ModelScreenState();
@@ -896,7 +892,7 @@ class ModelScreenState extends State<ModelScreen> {
 
     String? token = html.window.localStorage['token'];
 
-    IntoHome(token).then((value) {
+    lntoHome(token).then((value) {
       //print("");
       Map data1 = value["data1"];
       //print("data1$data1");
@@ -917,7 +913,7 @@ class ModelScreenState extends State<ModelScreen> {
           children: [
             Container(
               height: 250,
-              color: Color.fromARGB(255, 254, 79, 52),
+              color: const Color.fromARGB(255, 254, 79, 52),
             ),
             Expanded(
                 child: Container(
@@ -927,7 +923,7 @@ class ModelScreenState extends State<ModelScreen> {
         ),
         Positioned(
             child: Padding(
-          padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+          padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
           child: ListView(
             children: [
               Row(
@@ -937,8 +933,8 @@ class ModelScreenState extends State<ModelScreen> {
                         Navigator.pop(context);
                       },
                       child: Container(
-                          margin: EdgeInsets.only(left: 10, right: 10),
-                          child: Icon(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          child: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.white,
                             size: 25,
@@ -947,11 +943,11 @@ class ModelScreenState extends State<ModelScreen> {
                       child: Text(
                     "${data["name"]}",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
                   )),
                   Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
-                      child: Icon(
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      child: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.transparent,
                         size: 20,
@@ -959,11 +955,11 @@ class ModelScreenState extends State<ModelScreen> {
                 ],
               ),
               Container(
-                padding: EdgeInsets.only(top: 45),
-                margin: EdgeInsets.only(top: 35, left: 5, right: 5),
+                padding: const EdgeInsets.only(top: 45),
+                margin: const EdgeInsets.only(top: 35, left: 5, right: 5),
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(color: Colors.black26, blurRadius: 5)
                     ],
                     borderRadius: BorderRadius.circular(10)),
@@ -972,7 +968,7 @@ class ModelScreenState extends State<ModelScreen> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Text(
                           "总余额",
                           style: TextStyle(color: Colors.black, fontSize: 14),
@@ -986,7 +982,7 @@ class ModelScreenState extends State<ModelScreen> {
                     ),
                     Text(
                       "${data["balance"]}",
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: "Yu Gothic UI",
                           height: 2.5,
                           color: Colors.black87,
@@ -994,12 +990,12 @@ class ModelScreenState extends State<ModelScreen> {
                           fontWeight: FontWeight.w400),
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      padding: EdgeInsets.only(left: 10, right: 10),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(199, 205, 205, 205),
+                          color: const Color.fromARGB(199, 205, 205, 205),
                           borderRadius: BorderRadius.circular(20)),
-                      child: Text(
+                      child: const Text(
                         "收益明细",
                         style: TextStyle(
                             height: 1.8,
@@ -1010,23 +1006,23 @@ class ModelScreenState extends State<ModelScreen> {
                     ),
                     Text(
                       "当前利率：${data["interest"]}%",
-                      style: TextStyle(
+                      style: const TextStyle(
                           height: 1.4,
                           color: Colors.black54,
                           fontSize: 12,
                           fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 45,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
+                      margin: const EdgeInsets.only(left: 10, right: 10),
                       child: Row(
                         children: [
                           Expanded(
                               child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 "总金额（￥）",
                                 style: TextStyle(
                                     height: 1.3,
@@ -1036,7 +1032,7 @@ class ModelScreenState extends State<ModelScreen> {
                               ),
                               Text(
                                 "${data["total"]}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: "Microsoft JhengHei",
                                     height: 1.5,
                                     color: Colors.black87,
@@ -1048,7 +1044,7 @@ class ModelScreenState extends State<ModelScreen> {
                           Expanded(
                               child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 "可转出金额（￥）",
                                 style: TextStyle(
                                     height: 1.3,
@@ -1058,7 +1054,7 @@ class ModelScreenState extends State<ModelScreen> {
                               ),
                               Text(
                                 "${data["enout"]}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: "Microsoft JhengHei",
                                     height: 1.5,
                                     color: Colors.black87,
@@ -1070,7 +1066,7 @@ class ModelScreenState extends State<ModelScreen> {
                           Expanded(
                               child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 "当前收益（￥）",
                                 style: TextStyle(
                                     height: 1.3,
@@ -1080,7 +1076,7 @@ class ModelScreenState extends State<ModelScreen> {
                               ),
                               Text(
                                 "${data["current"]}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: "Microsoft JhengHei",
                                     height: 1.5,
                                     color: Colors.black87,
@@ -1094,11 +1090,11 @@ class ModelScreenState extends State<ModelScreen> {
                     ),
                     Container(
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 254, 79, 52),
+                            color: const Color.fromARGB(255, 254, 79, 52),
                             borderRadius: BorderRadius.circular(8)),
                         height: 80,
                         width: 500,
-                        margin: EdgeInsets.all(15),
+                        margin: const EdgeInsets.all(15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -1108,7 +1104,7 @@ class ModelScreenState extends State<ModelScreen> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 "    最低转入金额：${data["top"]}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     height: 1,
                                     color: Colors.white,
                                     fontSize: 15,
@@ -1124,7 +1120,7 @@ class ModelScreenState extends State<ModelScreen> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 "    最高转入金额：${data["bottom"]}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     //fontFamily: "MS Gothic",
                                     height: 1,
                                     color: Colors.white,
@@ -1134,7 +1130,7 @@ class ModelScreenState extends State<ModelScreen> {
                             )),
                           ],
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 25,
                     ),
                     Container(
@@ -1158,8 +1154,8 @@ class ModelScreenState extends State<ModelScreen> {
                               );
                             },
                             child: Container(
-                              color: Color.fromARGB(255, 254, 79, 52),
-                              child: Center(
+                              color: const Color.fromARGB(255, 254, 79, 52),
+                              child: const Center(
                                 child: Text(
                                   "转入",
                                   style: TextStyle(
@@ -1182,8 +1178,9 @@ class ModelScreenState extends State<ModelScreen> {
                                     );
                                   },
                                   child: Container(
-                                    color: Color.fromARGB(255, 253, 239, 232),
-                                    child: Center(
+                                    color: const Color.fromARGB(
+                                        255, 253, 239, 232),
+                                    child: const Center(
                                       child: Text(
                                         "转出",
                                         style: TextStyle(
@@ -1201,21 +1198,21 @@ class ModelScreenState extends State<ModelScreen> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
+                  margin: const EdgeInsets.fromLTRB(10, 30, 10, 10),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(color: Colors.black12, blurRadius: 5)
                       ]),
 
                   //clipBehavior: Clip.hardEdge,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Scrollbar(
                     child: SingleChildScrollView(
                       child: Text(
                         "        ${discreption[widget.label]}",
-                        style: TextStyle(height: 2.2, fontSize: 17),
+                        style: const TextStyle(height: 2.2, fontSize: 17),
                       ),
                     ),
                   ))

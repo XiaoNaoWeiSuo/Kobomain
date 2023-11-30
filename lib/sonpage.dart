@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'dart:html' as html;
 import 'core.dart';
 
-class identityScreen extends StatefulWidget {
-  const identityScreen({super.key});
+class IdentityScreen extends StatefulWidget {
+  const IdentityScreen({super.key});
 
   @override
-  State<identityScreen> createState() => identityScreenState();
+  State<IdentityScreen> createState() => IdentityScreenState();
 }
 
-class identityScreenState extends State<identityScreen> {
+class IdentityScreenState extends State<IdentityScreen> {
   Map data = {};
   bool state = false;
   TextEditingController name = TextEditingController();
@@ -23,7 +23,7 @@ class identityScreenState extends State<identityScreen> {
   void initState() {
     super.initState();
     String? token = html.window.localStorage['token'];
-    IntoHome(token).then((value) {
+    lntoHome(token).then((value) {
       data = value;
       name.text = data["data2"]["name"];
       bank.text = data["data2"]["bank"];
@@ -209,7 +209,7 @@ class identityScreenState extends State<identityScreen> {
                     data["data2"]["check"] = "1";
                     String? token = html.window.localStorage['token'];
                     data.remove("status");
-                    Update(token, data).then((value) {
+                    update(token, data).then((value) {
                       if (value["status"] == "success") {
                         html.window.location.reload();
                       } else {
@@ -227,7 +227,7 @@ class identityScreenState extends State<identityScreen> {
                     borderRadius: BorderRadius.circular(3),
                     color: Colors.blue,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "确认填写",
                       style: TextStyle(color: Colors.white),
@@ -241,23 +241,23 @@ class identityScreenState extends State<identityScreen> {
   }
 }
 
-class logsScreen extends StatefulWidget {
-  List log;
-  logsScreen({super.key, required this.log});
+class LogsScreen extends StatefulWidget {
+  final List log;
+  const LogsScreen({super.key, required this.log});
 
   @override
-  State<logsScreen> createState() => logsScreenState();
+  State<LogsScreen> createState() => LogsScreenState();
 }
 
-class logsScreenState extends State<logsScreen> {
+class LogsScreenState extends State<LogsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-            color: Color.fromARGB(255, 14, 71, 212),
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+            color: const Color.fromARGB(255, 14, 71, 212),
             height: 50,
             child: Row(
               children: [
@@ -265,19 +265,19 @@ class logsScreenState extends State<logsScreen> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
                 ),
-                Expanded(
+                const Expanded(
                     child: Center(
                   child: Text(
                     "收益明细",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 )),
-                Icon(
+                const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.transparent,
                 ),
@@ -286,13 +286,13 @@ class logsScreenState extends State<logsScreen> {
           ),
           Expanded(
               child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: ListView.builder(
               itemCount: widget.log.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: EdgeInsets.all(1),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.all(1),
+                  decoration: const BoxDecoration(
                       border: Border(
                           top: BorderSide(width: 1, color: Colors.black12))),
                   width: 500,
@@ -301,62 +301,62 @@ class logsScreenState extends State<logsScreen> {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.access_time,
                             size: 13,
                           ),
                           Text(
                             "购买时间: ${widget.log[index]["start"]}",
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                           )
                         ],
                       ),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.access_time,
                             size: 13,
                           ),
                           Text(
                             "结束时间: ${widget.log[index]["end"]}",
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                           ),
-                          Expanded(child: SizedBox()),
+                          const Expanded(child: SizedBox()),
                           Text(
                             widget.log[index]["status"] == "0" ? "进行中" : "已结束",
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
                         children: [
                           Text(
                             "${widget.log[index]["name"]}",
-                            style: TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 10),
                           ),
-                          Expanded(child: SizedBox()),
+                          const Expanded(child: SizedBox()),
                           Text(
                             "利率：${widget.log[index]["interest"]}%",
-                            style: TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 10),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
                         children: [
                           Text(
                             "本金：${widget.log[index]["base"]}￥",
-                            style: TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 10),
                           ),
-                          Expanded(child: SizedBox()),
+                          const Expanded(child: SizedBox()),
                           Text(
                             "收益：${widget.log[index]["gone"]}￥",
-                            style: TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 10),
                           )
                         ],
                       ),
@@ -372,14 +372,14 @@ class logsScreenState extends State<logsScreen> {
   }
 }
 
-class depositScreen extends StatefulWidget {
-  const depositScreen({super.key});
+class DepositScreen extends StatefulWidget {
+  const DepositScreen({super.key});
 
   @override
-  State<depositScreen> createState() => depositScreenState();
+  State<DepositScreen> createState() => DepositScreenState();
 }
 
-class depositScreenState extends State<depositScreen> {
+class DepositScreenState extends State<DepositScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -419,14 +419,14 @@ class depositScreenState extends State<depositScreen> {
   }
 }
 
-class atmScreen extends StatefulWidget {
-  const atmScreen({super.key});
+class AtmScreen extends StatefulWidget {
+  const AtmScreen({super.key});
 
   @override
-  State<atmScreen> createState() => atmScreenState();
+  State<AtmScreen> createState() => AtmScreenState();
 }
 
-class atmScreenState extends State<atmScreen> {
+class AtmScreenState extends State<AtmScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -466,14 +466,14 @@ class atmScreenState extends State<atmScreen> {
   }
 }
 
-class settingScreen extends StatefulWidget {
-  const settingScreen({super.key});
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  State<settingScreen> createState() => settingScreenState();
+  State<SettingScreen> createState() => SettingScreenState();
 }
 
-class settingScreenState extends State<settingScreen> {
+class SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -514,8 +514,10 @@ class settingScreenState extends State<settingScreen> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => identityScreen()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const IdentityScreen()));
               },
               child: Container(
                 padding: const EdgeInsets.all(10),
@@ -538,7 +540,7 @@ class settingScreenState extends State<settingScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => pwScreen(
+                        builder: (context) => const PwScreen(
                               mode: true,
                             )));
               },
@@ -563,7 +565,7 @@ class settingScreenState extends State<settingScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => pwScreen(
+                        builder: (context) => const PwScreen(
                               mode: false,
                             )));
               },
@@ -590,14 +592,14 @@ class settingScreenState extends State<settingScreen> {
   }
 }
 
-class languageScreen extends StatefulWidget {
-  const languageScreen({super.key});
+class LanguageScreen extends StatefulWidget {
+  const LanguageScreen({super.key});
 
   @override
-  State<languageScreen> createState() => languageScreenState();
+  State<LanguageScreen> createState() => LanguageScreenState();
 }
 
-class languageScreenState extends State<languageScreen> {
+class LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -665,15 +667,15 @@ class languageScreenState extends State<languageScreen> {
   }
 }
 
-class pwScreen extends StatefulWidget {
-  bool mode;
-  pwScreen({required this.mode, super.key});
+class PwScreen extends StatefulWidget {
+  final bool mode;
+  const PwScreen({required this.mode, super.key});
 
   @override
-  State<pwScreen> createState() => pwScreenState();
+  State<PwScreen> createState() => PwScreenState();
 }
 
-class pwScreenState extends State<pwScreen> {
+class PwScreenState extends State<PwScreen> {
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -683,7 +685,7 @@ class pwScreenState extends State<pwScreen> {
   void initState() {
     super.initState();
     String? token = html.window.localStorage['token'];
-    IntoHome(token).then((value) {
+    lntoHome(token).then((value) {
       data = value;
       setState(() {});
     });
@@ -729,7 +731,7 @@ class pwScreenState extends State<pwScreen> {
             child: TextField(
               controller: oldPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '原密码',
               ),
             ),
@@ -739,7 +741,7 @@ class pwScreenState extends State<pwScreen> {
             child: TextField(
               controller: newPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '新密码',
               ),
             ),
@@ -749,7 +751,7 @@ class pwScreenState extends State<pwScreen> {
             child: TextField(
               controller: confirmPasswordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '确认新密码',
               ),
             ),
@@ -759,7 +761,7 @@ class pwScreenState extends State<pwScreen> {
               // 在这里添加确认修改的逻辑
               confirmModification();
             },
-            child: Text('确认修改'),
+            child: const Text('确认修改'),
           ),
         ],
       ),

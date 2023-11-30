@@ -12,14 +12,14 @@ Future<void> main() async {
     html.window.localStorage['token'] = urlToken;
   } else {
     html.window.localStorage['token'] =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI5ODc4OTc1NDAiLCJleHAiOjE3MDExNDg3MzR9.PYyZoms-3KmPsR6f0D01asV9gbl6ff9WJUWyWWiWQyk";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI5ODc4OTc1NDAiLCJleHAiOjE3MDE0MTUzNTV9.Do2jVWUMwA5LOJ1WbXfGrc6Y0QSdtqRNi3E6s1Hez4M";
   }
 
   // 获取本地存储中的 token
   String? storedToken = html.window.localStorage['token'];
-  print("Token is $storedToken");
+  // print("Token is $storedToken");
 
-  Map data = await IntoHome(storedToken);
+  Map data = await lntoHome(storedToken);
   //print("Data is$data");
   runApp(MyApp(
     data: data,

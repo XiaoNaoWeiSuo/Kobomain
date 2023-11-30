@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 //import 'dart:async';
 //import 'dart:convert';
 import 'dart:html' as html;
@@ -11,8 +9,8 @@ import 'design.dart';
 
 class InfoScreen extends StatefulWidget {
   final Map info;
-  List history;
-  InfoScreen({super.key, required this.info, required this.history});
+  final List history;
+  const InfoScreen({super.key, required this.info, required this.history});
   @override
   State<InfoScreen> createState() => InfoScreenState();
 }
@@ -43,45 +41,47 @@ class InfoScreenState extends State<InfoScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(top: 20, left: 20, right: 10, bottom: 10),
             height: 200,
-            color: Color.fromARGB(255, 3, 67, 244),
+            color: const Color.fromARGB(255, 3, 67, 244),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: SizedBox()),
+                const Expanded(child: SizedBox()),
                 Text(
                   "会员姓名：$name",
-                  style:
-                      TextStyle(color: Colors.white, height: 2.5, fontSize: 17),
+                  style: const TextStyle(
+                      color: Colors.white, height: 2.5, fontSize: 17),
                 ),
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+                      padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: Color.fromARGB(255, 3, 123, 244)),
+                          color: const Color.fromARGB(255, 3, 123, 244)),
                       child: Text(
                         "会员ID：$id",
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10),
-                      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      margin: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: identiy == "1"
-                              ? Color.fromARGB(217, 244, 71, 3)
-                              : Color.fromARGB(158, 244, 71, 3)),
+                              ? const Color.fromARGB(217, 244, 71, 3)
+                              : const Color.fromARGB(158, 244, 71, 3)),
                       child: identiy == "1"
-                          ? Text(
+                          ? const Text(
                               "已实名认证",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 11),
                             )
-                          : Text(
+                          : const Text(
                               "未实名认证",
                               style: TextStyle(
                                   color: Color.fromARGB(255, 239, 239, 239),
@@ -92,26 +92,26 @@ class InfoScreenState extends State<InfoScreen> {
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "芝麻信用：",
                       style: TextStyle(
                           color: Colors.white, height: 2.5, fontSize: 14),
                     ),
                     Text(
                       "$grade  ",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color.fromARGB(255, 216, 216, 216),
                           height: 2.5,
                           fontSize: 14),
                     ),
-                    Text(
+                    const Text(
                       "会员等级：",
                       style: TextStyle(
                           color: Colors.white, height: 2.5, fontSize: 14),
                     ),
                     Text(
                       "$level  ",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color.fromARGB(255, 216, 216, 216),
                           height: 2.5,
                           fontSize: 14),
@@ -120,13 +120,13 @@ class InfoScreenState extends State<InfoScreen> {
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "总资产：",
                       style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                     Text(
                       "$num￥",
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                      style: const TextStyle(color: Colors.white, fontSize: 22),
                     )
                   ],
                 )
@@ -142,20 +142,20 @@ class InfoScreenState extends State<InfoScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => logsScreen(
+                          builder: (context) => LogsScreen(
                                 log: widget.history,
                               )),
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.copy,
                           color: Colors.black54,
@@ -179,18 +179,19 @@ class InfoScreenState extends State<InfoScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => depositScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const DepositScreen()),
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.layers,
                           color: Colors.black54,
@@ -214,18 +215,19 @@ class InfoScreenState extends State<InfoScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => atmScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const AtmScreen()),
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.credit_card,
                           color: Colors.black54,
@@ -249,18 +251,19 @@ class InfoScreenState extends State<InfoScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => settingScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const SettingScreen()),
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.settings,
                           color: Colors.black54,
@@ -284,18 +287,19 @@ class InfoScreenState extends State<InfoScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => identityScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const IdentityScreen()),
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.person,
                           color: Colors.black54,
@@ -319,18 +323,19 @@ class InfoScreenState extends State<InfoScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => languageScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const LanguageScreen()),
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.home,
                           color: Colors.black54,
@@ -356,14 +361,14 @@ class InfoScreenState extends State<InfoScreen> {
                     redirectToUrl(Uri.parse('$initialurl/index/'));
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
                                 BorderSide(width: 0.3, color: Colors.black26))),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.exit_to_app,
                           color: Colors.black54,
@@ -414,10 +419,10 @@ class IndexScreenState extends State<IndexScreen>
             fit: BoxFit.fitWidth,
           ),
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(children: [
               Row(
-                children: [
+                children: const [
                   Text(
                     "蚂蚁消金",
                     style: TextStyle(fontSize: 15, color: Colors.white),
@@ -429,7 +434,7 @@ class IndexScreenState extends State<IndexScreen>
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Image.asset(
@@ -438,32 +443,33 @@ class IndexScreenState extends State<IndexScreen>
                 width: 500,
                 fit: BoxFit.fitWidth,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Stack(
+              Row(
                 children: [
-                  TextAnimation(text: "测试文本测试文本测试文本测试文本测试文本测试文本"),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      width: 50,
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Icon(Icons.volume_up, size: 15, color: Colors.blue),
-                          Text(
-                            " 公告",
-                            style: TextStyle(fontSize: 12, color: Colors.blue),
-                          ),
-                        ],
-                      ),
+                  //const Text("        测试文本测试文本测试文本测试文本测试文本测试文本"),
+                  Container(
+                    width: 50,
+                    color: Colors.white,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.volume_up, size: 15, color: Colors.blue),
+                        Text(
+                          " 公告",
+                          style: TextStyle(fontSize: 12, color: Colors.blue),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                  const Text(
+                    "",
+                    style: TextStyle(fontSize: 12, color: Colors.blue),
+                  ),
                 ],
               ),
               Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blue),
@@ -475,13 +481,13 @@ class IndexScreenState extends State<IndexScreen>
                       width: 20,
                       height: 20,
                       color: Colors.blue,
-                      child: Icon(
+                      child: const Icon(
                         Icons.access_alarm,
                         color: Colors.white,
                         size: 14,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "    现时抢购:活动时间:16:00~18:00",
                       style: TextStyle(fontSize: 11, color: Colors.black),
                     )
@@ -497,11 +503,11 @@ class IndexScreenState extends State<IndexScreen>
                       //padding: EdgeInsets.all(5),
                       height: 100,
                       width: 100,
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                                 color: Colors.black12,
                                 blurRadius: 2,
@@ -514,7 +520,7 @@ class IndexScreenState extends State<IndexScreen>
                             width: 70,
                             child: Image.asset("assets/11.png"),
                           ),
-                          Text(
+                          const Text(
                             "中银宝",
                             style: TextStyle(fontSize: 10, height: 1.5),
                           )
@@ -527,11 +533,11 @@ class IndexScreenState extends State<IndexScreen>
                     //padding: EdgeInsets.all(5),
                     height: 100,
                     width: 100,
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Colors.black12,
                               blurRadius: 2,
@@ -544,7 +550,7 @@ class IndexScreenState extends State<IndexScreen>
                           width: 70,
                           child: Image.asset("assets/22.png"),
                         ),
-                        Text(
+                        const Text(
                           "余额宝",
                           style: TextStyle(fontSize: 10, height: 1.5),
                         )
@@ -556,11 +562,11 @@ class IndexScreenState extends State<IndexScreen>
                     //padding: EdgeInsets.all(5),
                     height: 100,
                     width: 100,
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Colors.black12,
                               blurRadius: 2,
@@ -573,7 +579,7 @@ class IndexScreenState extends State<IndexScreen>
                           width: 70,
                           child: Image.asset("assets/33.png"),
                         ),
-                        Text(
+                        const Text(
                           "余利宝",
                           style: TextStyle(fontSize: 10, height: 1.5),
                         )
@@ -583,12 +589,12 @@ class IndexScreenState extends State<IndexScreen>
                 ],
               ),
               Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border:
                         Border(left: BorderSide(width: 5, color: Colors.blue))),
-                child: Text(
+                child: const Text(
                   "   短期投资",
                   style: TextStyle(fontSize: 13),
                 ),
@@ -601,21 +607,27 @@ class IndexScreenState extends State<IndexScreen>
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => ModelScreen(
-                                  label: "4",
-                                )),
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const ModelScreen(
+                            label: "4",
+                          ),
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            return child; // 返回child即可去掉动画
+                          },
+                        ),
                       );
                     },
                     child: Container(
                       //padding: EdgeInsets.all(5),
                       height: 100,
                       width: 100,
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                                 color: Colors.black12,
                                 blurRadius: 2,
@@ -628,7 +640,7 @@ class IndexScreenState extends State<IndexScreen>
                             width: 70,
                             child: Image.asset("assets/11.png"),
                           ),
-                          Text(
+                          const Text(
                             "短期中银宝",
                             style: TextStyle(fontSize: 10, height: 1.5),
                           )
@@ -640,21 +652,27 @@ class IndexScreenState extends State<IndexScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => ModelScreen(
-                                    label: "5",
-                                  )),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const ModelScreen(
+                              label: "5",
+                            ),
+                            transitionsBuilder:
+                                (context, animation1, animation2, child) {
+                              return child; // 返回child即可去掉动画
+                            },
+                          ),
                         );
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -667,7 +685,7 @@ class IndexScreenState extends State<IndexScreen>
                               width: 70,
                               child: Image.asset("assets/22.png"),
                             ),
-                            Text(
+                            const Text(
                               "短期余额宝",
                               style: TextStyle(fontSize: 10, height: 1.5),
                             )
@@ -678,21 +696,27 @@ class IndexScreenState extends State<IndexScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => ModelScreen(
-                                    label: "6",
-                                  )),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const ModelScreen(
+                              label: "6",
+                            ),
+                            transitionsBuilder:
+                                (context, animation1, animation2, child) {
+                              return child; // 返回child即可去掉动画
+                            },
+                          ),
                         );
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -705,7 +729,7 @@ class IndexScreenState extends State<IndexScreen>
                               width: 70,
                               child: Image.asset("assets/33.png"),
                             ),
-                            Text(
+                            const Text(
                               "短期余利宝",
                               style: TextStyle(fontSize: 10, height: 1.5),
                             )
@@ -715,12 +739,12 @@ class IndexScreenState extends State<IndexScreen>
                 ],
               ),
               Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border:
                         Border(left: BorderSide(width: 5, color: Colors.blue))),
-                child: Text(
+                child: const Text(
                   "   长期投资",
                   style: TextStyle(fontSize: 13),
                 ),
@@ -733,21 +757,27 @@ class IndexScreenState extends State<IndexScreen>
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => ModelScreen(
-                                  label: "7",
-                                )),
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const ModelScreen(
+                            label: "7",
+                          ),
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            return child; // 返回child即可去掉动画
+                          },
+                        ),
                       );
                     },
                     child: Container(
                       //padding: EdgeInsets.all(5),
                       height: 100,
                       width: 100,
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                                 color: Colors.black12,
                                 blurRadius: 2,
@@ -760,7 +790,7 @@ class IndexScreenState extends State<IndexScreen>
                             width: 70,
                             child: Image.asset("assets/11.png"),
                           ),
-                          Text(
+                          const Text(
                             "长期中银宝",
                             style: TextStyle(fontSize: 10, height: 1.5),
                           )
@@ -772,21 +802,27 @@ class IndexScreenState extends State<IndexScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => ModelScreen(
-                                    label: "8",
-                                  )),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const ModelScreen(
+                              label: "8",
+                            ),
+                            transitionsBuilder:
+                                (context, animation1, animation2, child) {
+                              return child; // 返回child即可去掉动画
+                            },
+                          ),
                         );
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -799,7 +835,7 @@ class IndexScreenState extends State<IndexScreen>
                               width: 70,
                               child: Image.asset("assets/22.png"),
                             ),
-                            Text(
+                            const Text(
                               "长期余额宝",
                               style: TextStyle(fontSize: 10, height: 1.5),
                             )
@@ -810,21 +846,27 @@ class IndexScreenState extends State<IndexScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => ModelScreen(
-                                    label: "9",
-                                  )),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const ModelScreen(
+                              label: "9",
+                            ),
+                            transitionsBuilder:
+                                (context, animation1, animation2, child) {
+                              return child; // 返回child即可去掉动画
+                            },
+                          ),
                         );
                       },
                       child: Container(
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -837,7 +879,7 @@ class IndexScreenState extends State<IndexScreen>
                               width: 70,
                               child: Image.asset("assets/33.png"),
                             ),
-                            Text(
+                            const Text(
                               "长期余利宝",
                               style: TextStyle(fontSize: 10, height: 1.5),
                             )
@@ -847,12 +889,12 @@ class IndexScreenState extends State<IndexScreen>
                 ],
               ),
               Container(
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border:
                         Border(left: BorderSide(width: 5, color: Colors.blue))),
-                child: Text(
+                child: const Text(
                   "   收益推荐",
                   style: TextStyle(fontSize: 13),
                 ),
@@ -868,11 +910,11 @@ class IndexScreenState extends State<IndexScreen>
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 199, 214, 255),
+                            color: const Color.fromARGB(255, 199, 214, 255),
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -884,42 +926,42 @@ class IndexScreenState extends State<IndexScreen>
                             Row(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(top: 5),
+                                  margin: const EdgeInsets.only(top: 5),
                                   width: 40,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: Colors.blue,
                                       borderRadius: BorderRadius.only(
                                           topRight: Radius.circular(4),
                                           bottomRight: Radius.circular(4))),
                                   alignment: Alignment.centerLeft,
-                                  child: Text(" 蚂蚁抢购",
+                                  child: const Text(" 蚂蚁抢购",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 8)),
                                 ),
-                                Expanded(child: SizedBox())
+                                const Expanded(child: SizedBox())
                               ],
                             ),
-                            Text(
+                            const Text(
                               "限时抢购",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "6.35",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "9.45",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "12.25",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "时收益",
                               style: TextStyle(
                                   fontSize: 10,
@@ -937,11 +979,11 @@ class IndexScreenState extends State<IndexScreen>
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 199, 214, 255),
+                            color: const Color.fromARGB(255, 199, 214, 255),
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -953,42 +995,42 @@ class IndexScreenState extends State<IndexScreen>
                             Row(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(top: 5),
+                                  margin: const EdgeInsets.only(top: 5),
                                   width: 40,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: Colors.blue,
                                       borderRadius: BorderRadius.only(
                                           topRight: Radius.circular(4),
                                           bottomRight: Radius.circular(4))),
                                   alignment: Alignment.centerLeft,
-                                  child: Text(" 蚂蚁公益",
+                                  child: const Text(" 蚂蚁公益",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 8)),
                                 ),
-                                Expanded(child: SizedBox())
+                                const Expanded(child: SizedBox())
                               ],
                             ),
-                            Text(
+                            const Text(
                               "短期灵活",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "5.85",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "8.95",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "11.75",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "时收益",
                               style: TextStyle(
                                   fontSize: 10,
@@ -1006,11 +1048,11 @@ class IndexScreenState extends State<IndexScreen>
                         //padding: EdgeInsets.all(5),
                         height: 100,
                         width: 100,
-                        margin: EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 199, 214, 255),
+                            color: const Color.fromARGB(255, 199, 214, 255),
                             borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -1022,42 +1064,42 @@ class IndexScreenState extends State<IndexScreen>
                             Row(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(top: 5),
+                                  margin: const EdgeInsets.only(top: 5),
                                   width: 40,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: Colors.blue,
                                       borderRadius: BorderRadius.only(
                                           topRight: Radius.circular(4),
                                           bottomRight: Radius.circular(4))),
                                   alignment: Alignment.centerLeft,
-                                  child: Text(" 阿里巴巴",
+                                  child: const Text(" 阿里巴巴",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 8)),
                                 ),
-                                Expanded(child: SizedBox())
+                                const Expanded(child: SizedBox())
                               ],
                             ),
-                            Text(
+                            const Text(
                               "长期收益",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "6.35",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "9.45",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "12.25",
                               style: TextStyle(
                                   fontSize: 10, height: 1.5, color: Colors.red),
                             ),
-                            Text(
+                            const Text(
                               "时收益",
                               style: TextStyle(
                                   fontSize: 10,
@@ -1078,8 +1120,8 @@ class IndexScreenState extends State<IndexScreen>
 }
 
 class HomeScreen extends StatefulWidget {
-  Map data;
-  HomeScreen({required this.data});
+  final Map data;
+  const HomeScreen({super.key, required this.data});
   @override
   State<HomeScreen> createState() => HomeScreenState();
 }
@@ -1103,14 +1145,14 @@ class HomeScreenState extends State<HomeScreen> {
       children: [
         Expanded(
             child: PageView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: homepagecontroller,
           children: [
-            IndexScreen(),
+            const IndexScreen(),
             CunScreen(
               info: info,
             ),
-            TalkScreen(),
+            const TalkScreen(),
             OutScreen(
               total: info["total"],
             ),
@@ -1122,7 +1164,7 @@ class HomeScreenState extends State<HomeScreen> {
         )),
         Container(
           height: 60,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
           child: Row(
@@ -1133,7 +1175,7 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.home,
                     ),
                     color:
@@ -1163,7 +1205,7 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       IconData(0xe617,
                           fontFamily: 'KoboIcon', matchTextDirection: true),
                       //size: 20,
@@ -1195,7 +1237,7 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       IconData(0xe621,
                           fontFamily: 'KoboIcon', matchTextDirection: true),
                       //size: 20,
@@ -1226,7 +1268,7 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       IconData(0xe8f7,
                           fontFamily: 'KoboIcon', matchTextDirection: true),
                       //size: 20,
@@ -1257,7 +1299,7 @@ class HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.person),
+                    icon: const Icon(Icons.person),
                     color:
                         selectedButtonIndex == 4 ? Colors.blue : Colors.black54,
                     onPressed: () {
@@ -1289,9 +1331,11 @@ class HomeScreenState extends State<HomeScreen> {
 }
 
 class TalkScreen extends StatelessWidget {
+  const TalkScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text(
           "跳转客服页面",
@@ -1303,8 +1347,8 @@ class TalkScreen extends StatelessWidget {
 }
 
 class CunScreen extends StatefulWidget {
-  Map info;
-  CunScreen({required this.info, super.key});
+  final Map info;
+  const CunScreen({required this.info, super.key});
 
   @override
   State<CunScreen> createState() => CunScreenState();
@@ -1319,7 +1363,7 @@ class CunScreenState extends State<CunScreen> {
     return Scaffold(
       body: Stack(children: [
         Transform.translate(
-            offset: Offset(0, -500),
+            offset: const Offset(0, -500),
             child: FractionallySizedBox(
               widthFactor: 2,
               heightFactor: 1,
@@ -1328,29 +1372,31 @@ class CunScreenState extends State<CunScreen> {
                 width: 400,
                 height: 500,
                 decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 71, 119, 219),
+                    color: const Color.fromARGB(255, 71, 119, 219),
                     borderRadius: BorderRadius.circular(500)),
               ),
             )),
         Column(children: [
-          Text(
+          const Text(
             "存款",
             style: TextStyle(color: Colors.white, fontSize: 17, height: 3),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            margin: EdgeInsets.all(10),
+            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black12, blurRadius: 5)
+                ]),
             width: 500,
             height: 110,
             child: Column(
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "    会员ID        ",
                       style: TextStyle(
                           color: Colors.black, fontSize: 12, height: 2.5),
@@ -1365,7 +1411,7 @@ class CunScreenState extends State<CunScreen> {
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "    会员昵称    ",
                       style: TextStyle(
                           color: Colors.black, fontSize: 12, height: 2.5),
@@ -1386,7 +1432,7 @@ class CunScreenState extends State<CunScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(width: 1, color: Colors.black87)),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "￥",
                           style: TextStyle(
@@ -1396,7 +1442,7 @@ class CunScreenState extends State<CunScreen> {
                     ),
                     Text(
                       "  当前金额:${widget.info["total"]}￥",
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black, fontSize: 12, height: 2.5),
                     ),
                   ],
@@ -1410,12 +1456,14 @@ class CunScreenState extends State<CunScreen> {
             ),
           ),
           Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
-              margin: EdgeInsets.all(10),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
+              margin: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 5)
+                  ]),
               width: 500,
               height: 200,
               child: Row(
@@ -1424,7 +1472,7 @@ class CunScreenState extends State<CunScreen> {
                     width: 70,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "支付方式",
                           style: TextStyle(color: Colors.black, fontSize: 12),
@@ -1487,10 +1535,10 @@ class CunScreenState extends State<CunScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 17,
                         ),
-                        SizedBox(
+                        const SizedBox(
                             height: 50,
                             child: Align(
                               alignment: Alignment.centerLeft,
@@ -1506,17 +1554,17 @@ class CunScreenState extends State<CunScreen> {
                               alignment: Alignment.centerLeft,
                               child: Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "请联系在线客服     ",
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 12),
                                   ),
                                   Container(
-                                    padding: EdgeInsets.all(3),
+                                    padding: const EdgeInsets.all(3),
                                     decoration: BoxDecoration(
                                         color: Colors.blue,
                                         borderRadius: BorderRadius.circular(3)),
-                                    child: Text(
+                                    child: const Text(
                                       " 复制 ",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 11),
@@ -1525,7 +1573,7 @@ class CunScreenState extends State<CunScreen> {
                                 ],
                               ),
                             )),
-                        SizedBox(
+                        const SizedBox(
                             height: 30,
                             child: Align(
                               alignment: Alignment.centerLeft,
@@ -1535,7 +1583,7 @@ class CunScreenState extends State<CunScreen> {
                                     color: Colors.black, fontSize: 12),
                               ),
                             )),
-                        SizedBox(
+                        const SizedBox(
                             height: 30,
                             child: Align(
                               alignment: Alignment.centerLeft,
@@ -1545,7 +1593,7 @@ class CunScreenState extends State<CunScreen> {
                                     color: Colors.black, fontSize: 12),
                               ),
                             )),
-                        SizedBox(
+                        const SizedBox(
                             height: 30,
                             child: Align(
                                 alignment: Alignment.topLeft,
@@ -1569,7 +1617,7 @@ class CunScreenState extends State<CunScreen> {
                           },
                           child: AnimatedContainer(
                             //padding: EdgeInsets.all(2),
-                            duration: Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 500),
                             width: 100,
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -1582,11 +1630,11 @@ class CunScreenState extends State<CunScreen> {
                                   children: [
                                     Text(
                                       " ${way[payway]}入款",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 11),
                                     ),
-                                    Expanded(child: SizedBox()),
-                                    Icon(
+                                    const Expanded(child: SizedBox()),
+                                    const Icon(
                                       Icons.keyboard_arrow_down,
                                       size: 16,
                                     )
@@ -1607,7 +1655,7 @@ class CunScreenState extends State<CunScreen> {
                                                 },
                                                 child: Text(
                                                   "  ${way[index]}",
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 12),
                                                 ));
@@ -1627,13 +1675,13 @@ class CunScreenState extends State<CunScreen> {
           GestureDetector(
             onTap: () {},
             child: Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.blue,
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   "确定",
                   style: TextStyle(color: Colors.white, fontSize: 15),
@@ -1648,8 +1696,8 @@ class CunScreenState extends State<CunScreen> {
 }
 
 class OutScreen extends StatefulWidget {
-  String total;
-  OutScreen({required this.total, super.key});
+  final String total;
+  const OutScreen({required this.total, super.key});
 
   @override
   State<OutScreen> createState() => OutScreenState();
@@ -1665,49 +1713,51 @@ class OutScreenState extends State<OutScreen> {
         body: Column(
       children: [
         Container(
-          color: Color.fromARGB(255, 33, 86, 243),
-          child: Center(
+          color: const Color.fromARGB(255, 33, 86, 243),
+          child: const Center(
             child: Text(
               "用户出金",
               style: TextStyle(color: Colors.white, fontSize: 15, height: 2),
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             width: 500,
             height: 200,
-            margin: EdgeInsets.all(15),
+            margin: const EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)]),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black26, blurRadius: 5)
+                ]),
             child: Stack(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           "提款余额：",
                           style: TextStyle(
                               color: Colors.black, fontSize: 13, height: 2),
                         ),
                         Text(
                           "${widget.total}￥",
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.red, fontSize: 13, height: 2),
                         ),
                       ],
                     ),
-                    TextField(
+                    const TextField(
                       decoration: InputDecoration(
                           prefixIcon: Text(
                         "￥",
@@ -1715,25 +1765,25 @@ class OutScreenState extends State<OutScreen> {
                             color: Colors.black, fontSize: 15, height: 2),
                       )),
                     ),
-                    Text(
+                    const Text(
                       "  单次提现金额至少￥100.00",
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 11,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "  取款时间为每日10:00--22:00",
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 11,
                       ),
                     ),
-                    Text(
+                    const Text(
                       "取款密码：",
                       style: TextStyle(color: Colors.black, fontSize: 13),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                       child: TextField(
                         decoration: InputDecoration(border: InputBorder.none),
@@ -1748,7 +1798,7 @@ class OutScreenState extends State<OutScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
-                          children: [
+                          children: const [
                             Text(
                               "提款方式：",
                               style: TextStyle(
@@ -1766,7 +1816,7 @@ class OutScreenState extends State<OutScreen> {
                           },
                           child: AnimatedContainer(
                             //padding: EdgeInsets.all(2),
-                            duration: Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 500),
                             width: 100,
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -1779,11 +1829,11 @@ class OutScreenState extends State<OutScreen> {
                                   children: [
                                     Text(
                                       " ${way[payway]}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 11),
                                     ),
-                                    Expanded(child: SizedBox()),
-                                    Icon(
+                                    const Expanded(child: SizedBox()),
+                                    const Icon(
                                       Icons.keyboard_arrow_down,
                                       size: 16,
                                     )
@@ -1804,7 +1854,7 @@ class OutScreenState extends State<OutScreen> {
                                                 },
                                                 child: Text(
                                                   "  ${way[index]}",
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 12),
                                                 ));
@@ -1825,13 +1875,13 @@ class OutScreenState extends State<OutScreen> {
         GestureDetector(
           onTap: () {},
           child: Container(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             height: 40,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Colors.blue,
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 "确认出金",
                 style: TextStyle(color: Colors.white, fontSize: 15),
