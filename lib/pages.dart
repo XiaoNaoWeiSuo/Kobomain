@@ -419,6 +419,17 @@ class IndexScreen extends StatefulWidget {
 
 class IndexScreenState extends State<IndexScreen>
     with SingleTickerProviderStateMixin {
+  // late AnimationController animactrl;
+  // late Animation<double> Anima;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   animactrl = AnimationController(
+  //       vsync: this, duration: const Duration(milliseconds: 3));
+  //   Anima = Tween<double>(begin: 0.0, end: 1.0).animate(animactrl);
+  //   animactrl.repeat();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -463,6 +474,22 @@ class IndexScreenState extends State<IndexScreen>
                 children: [
                   //const Text("        测试文本测试文本测试文本测试文本测试文本测试文本"),
                   const TextAnimation(text: "凝聚爱心用户 4,535,294,299 次捐赠"),
+                  // AnimatedBuilder(
+                  //   animation: Anima,
+                  //   builder: (context, child) {
+                  //     return MediaQuery.removePadding(
+                  //         context: context,
+                  //         removeTop: true,
+                  //         child: ListView.builder(
+                  //           itemCount: 3,
+                  //           itemBuilder: (context, index) {
+                  //             return Container(
+                  //               child: Text("$index"),
+                  //             );
+                  //           },
+                  //         ));
+                  //   },
+                  // ),
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
@@ -1143,7 +1170,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void jumppage(int label) {
-    if (widget.data["data2"]["check"] == "1" || label == 4) {
+    if (widget.data["data2"]["check"] == "1" || label == 4 || label == 0) {
       homepagecontroller.jumpToPage(
         label, // 存款页面对应的页面索引
       );
@@ -1690,7 +1717,7 @@ class CunScreenState extends State<CunScreen> {
               )),
           GestureDetector(
             onTap: () {
-              showMyDialog(context, "资金转入成功，请耐心等待客户核实。");
+              showMyDialog(context, "资金存入中，等待系统审核");
             },
             child: Container(
               margin: const EdgeInsets.all(10),
@@ -1906,22 +1933,27 @@ class OutScreenState extends State<OutScreen> {
             String? token = html.window.localStorage['token'];
             lntoHome(token).then((value) {
               Map initdata = value;
-              initdata["data2"]["total"] =
-                  (Decimal.parse(value["data2"]["total"]) -
-                          Decimal.parse(number.text))
-                      .toStringAsFixed(2);
-              DateTime now = DateTime.now();
-              initdata["data3"]["out"].add({
-                "time": DateFormat('yyyy-MM-dd HH:mm:ss').format(now),
-                "value": Decimal.parse(number.text).toStringAsFixed(2)
-              });
-              mout(token, initdata, password.text).then((value) {
-                if (value["status"] == "success") {
-                  showMyDialog(context, "恭喜，取款成功！");
-                } else {
-                  showMyDialog(context, "密码错误或金额不符合要求");
-                }
-              });
+              if (Decimal.parse(value["data2"]["total"]) >=
+                  Decimal.parse(number.text)) {
+                initdata["data2"]["total"] =
+                    (Decimal.parse(value["data2"]["total"]) -
+                            Decimal.parse(number.text))
+                        .toStringAsFixed(2);
+                DateTime now = DateTime.now();
+                initdata["data3"]["out"].add({
+                  "time": DateFormat('yyyy-MM-dd HH:mm:ss').format(now),
+                  "value": Decimal.parse(number.text).toStringAsFixed(2)
+                });
+                mout(token, initdata, password.text).then((value) {
+                  if (value["status"] == "success") {
+                    showMyDialog(context, "恭喜，取款成功！");
+                  } else {
+                    showMyDialog(context, "密码错误或金额不符合要求");
+                  }
+                });
+              } else {
+                showMyDialog(context, "账户资产不足");
+              }
             });
           },
           child: Container(

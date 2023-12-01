@@ -12,7 +12,7 @@ Future<void> main() async {
     html.window.localStorage['token'] = urlToken;
   } else {
     html.window.localStorage['token'] =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiI3OTczNTA1NDAiLCJleHAiOjE3MDE0NDQ0NzZ9.67jpuu1Z36q6pd4r1H4Y5RNzZhI0IuK69wWF2lJXmS4";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIyMDIzOTg3NjU0IiwiZXhwIjoxNzAxNTI5MjUzfQ.dYMis5-8oRqdrrg2PxA-iqtvr_9oGEqGgohb63c9xfc";
   }
 
   // 获取本地存储中的 token
