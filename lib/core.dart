@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'dart:html' as html;
 
@@ -82,4 +84,63 @@ Future<void> showMyDialog(BuildContext context, String text) async {
       );
     },
   );
+}
+
+String generateAnonymousUserId() {
+  List<String> baseNames = [
+    "林", "华", "之声", "晓", "明", "风", "雨", "彩", "云", "龙",
+    "美", "希", "光", "影", "雪", "霜", "海", "波", "梦", "星",
+    "翔", "力", "韵", "琴", "宇", "奇", "瑞", "青", "夜", "花"
+    // 添加更多名字
+  ];
+
+  String userId = "";
+  // 添加随机的星号
+  int starCount = Random().nextInt(3) + 1; // 随机生成1到3个星号
+  userId += "*".padRight(starCount, '*');
+
+  // 添加汉字（1到2个字）
+  int chineseCount = Random().nextInt(2) + 1;
+  for (int i = 0; i < chineseCount; i++) {
+    userId += getRandomElement(baseNames);
+  }
+
+  return userId;
+}
+
+String getRandomElement(List<String> list) {
+  return list[Random().nextInt(list.length)];
+}
+
+String generateRandomAmount() {
+  const int maxAmount = 10000;
+  const int minAmount = 1;
+
+  // 使用指数分布生成整数倍数，1元的概率最大
+  double exponent = Random().nextDouble();
+  int amount = (pow(maxAmount, exponent) + minAmount).toInt();
+
+  // 保证生成的是整数倍数
+  amount -= amount % minAmount;
+
+  // 转换为保留两位小数的字符串
+  String formattedAmount = (amount / 100).toStringAsFixed(2);
+
+  return formattedAmount;
+}
+
+String generateRandomTime() {
+  Random random = Random();
+
+  // 随机生成小时和分钟
+  int hour = random.nextInt(12) + 1; // 1到12之间的小时
+  int minute = random.nextInt(60); // 0到59之间的分钟
+
+  // 随机生成“上午”或“下午”
+  String period = (random.nextBool()) ? "上午" : "下午";
+
+  // 格式化时间字符串
+  String formattedTime = "$period $hour:${minute.toString().padLeft(2, '0')}";
+
+  return formattedTime;
 }

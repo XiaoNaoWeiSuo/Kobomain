@@ -1,5 +1,6 @@
 //import 'dart:async';
 //import 'dart:convert';
+import 'dart:async';
 import 'dart:html' as html;
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -419,16 +420,81 @@ class IndexScreen extends StatefulWidget {
 
 class IndexScreenState extends State<IndexScreen>
     with SingleTickerProviderStateMixin {
-  // late AnimationController animactrl;
-  // late Animation<double> Anima;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   animactrl = AnimationController(
-  //       vsync: this, duration: const Duration(milliseconds: 3));
-  //   Anima = Tween<double>(begin: 0.0, end: 1.0).animate(animactrl);
-  //   animactrl.repeat();
-  // }
+  List<List> messages = [];
+
+  final ScrollController _scrollController = ScrollController();
+  void Tomaxposition() {
+    messages.add([
+      generateAnonymousUserId(),
+      generateRandomAmount(),
+      generateRandomTime()
+    ]);
+    setState(() {});
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    messages.add([
+      generateAnonymousUserId(),
+      generateRandomAmount(),
+      generateRandomTime()
+    ]);
+
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      // 每三秒触发一次的操作
+      Tomaxposition();
+    });
+  }
+
+  Widget _buildMessageWidget(String message, String value, String time) {
+    return Container(
+      padding: const EdgeInsets.all(3.0),
+      decoration: BoxDecoration(
+        color: Colors.black26,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            child: const Icon(
+              Icons.person,
+              size: 20,
+              color: Colors.black26,
+            ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            message,
+            style: const TextStyle(color: Colors.white, fontSize: 12),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            "  捐款$value元   ",
+            style: const TextStyle(color: Colors.white, fontSize: 12),
+          ),
+          Text(
+            "$time  ",
+            style: const TextStyle(
+                color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -470,37 +536,42 @@ class IndexScreenState extends State<IndexScreen>
               const SizedBox(
                 height: 10,
               ),
-              Stack(
-                children: [
-                  //const Text("        测试文本测试文本测试文本测试文本测试文本测试文本"),
-                  const TextAnimation(text: "凝聚爱心用户 4,535,294,299 次捐赠"),
-                  // AnimatedBuilder(
-                  //   animation: Anima,
-                  //   builder: (context, child) {
-                  //     return MediaQuery.removePadding(
-                  //         context: context,
-                  //         removeTop: true,
-                  //         child: ListView.builder(
-                  //           itemCount: 3,
-                  //           itemBuilder: (context, index) {
-                  //             return Container(
-                  //               child: Text("$index"),
-                  //             );
-                  //           },
-                  //         ));
-                  //   },
-                  // ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        color: Colors.white,
-                        child: const Text(
-                          " 公  告 ",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ))
-                ],
+              // Stack(
+              //   children: [
+              //     //const Text("        测试文本测试文本测试文本测试文本测试文本测试文本"),
+              //const TextAnimation(text: "凝聚爱心用户 4,535,294,299 次捐赠"),
+              SizedBox(
+                height: 55,
+                //padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  //reverse: true,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 1.0),
+                        child: Row(
+                          children: [
+                            _buildMessageWidget(messages[index][0],
+                                messages[index][1], messages[index][2]),
+                            const Expanded(child: SizedBox())
+                          ],
+                        ));
+                  },
+                ),
               ),
+              //     Align(
+              //         alignment: Alignment.centerLeft,
+              //         child: Container(
+              //           color: Colors.white,
+              //           child: const Text(
+              //             " 公  告 ",
+              //             style: TextStyle(color: Colors.blue),
+              //           ),
+              //         ))
+              //   ],
+              // ),
               Container(
                 margin: const EdgeInsets.all(10),
                 clipBehavior: Clip.hardEdge,
